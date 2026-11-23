@@ -71,3 +71,11 @@ export type {
   ClassSpellcasting,
   SpellSelection,
 } from "./class-progression.js";
+export {
+  ABILITY_ROLL_DICE,
+  ABILITY_ROLL_KEPT,
+  ABILITY_ROLL_SIDES,
+  rollAbilityScore,
+  rollAbilityScores,
+} from "./ability-rolls.js";
+export type { AbilityScoreRoll, RollDie } from "./ability-rolls.js";

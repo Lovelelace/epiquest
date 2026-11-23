@@ -7,8 +7,10 @@ import {
   type CharacterDraftUpdate,
   type DraftChoices,
 } from "@epiquest/schemas";
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { type RollDie, rollAbilityScores } from "@epiquest/rules";
+import { ConflictException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { eq } from "drizzle-orm";
+import { ROLL_DIE } from "../../shared/random/random.module.js";
 import { SrdService } from "../srd/srd.service.js";
 import { CHARACTER_DATABASE } from "./character-database.js";
 
@@ -58,6 +60,7 @@ export class DraftsService {
   constructor(
     @Inject(CHARACTER_DATABASE) private readonly db: SrdDatabase,
     private readonly srd: SrdService,
+    @Inject(ROLL_DIE) private readonly rollDie: RollDie,
   ) {}
 
   async create(): Promise<CharacterDraft> {
@@ -97,12 +100,40 @@ export class DraftsService {
       .set({
         choices,
         step: update.step ?? current.step,
-        ...(choicesUpdate.abilityMethod !== undefined &&
-        choicesUpdate.abilityMethod !== current.choices.abilityMethod
-          ? { abilityRolls: null }
-          : {}),
         updatedAt: new Date(),
       })
+      .where(eq(characterDrafts.id, id))
+      .returning();
+    if (!row)
+      throw new NotFoundException({
+        code: "DRAFT_NOT_FOUND",
+        message: "Ce brouillon n'existe pas.",
+      });
+    return toDraft(row);
+  }
+
+  /**
+   * Tire les six valeurs (4d6, on garde les 3 meilleurs) côté serveur. Un seul tirage par
+   * brouillon : on ne relance pas jusqu'à obtenir de bonnes valeurs. Les tirages restent
+   * enregistrés dans le brouillon, puis dans l'historique du personnage à sa création.
+   */
+  async rollAbilities(id: string): Promise<CharacterDraft> {
+    const current = await this.get(id);
+    if (current.abilityRolls) {
+      throw new ConflictException({
+        code: "ABILITIES_ALREADY_ROLLED",
+        message: "Les caractéristiques de ce brouillon ont déjà été tirées.",
+      });
+    }
+    const abilityRolls = rollAbilityScores(this.rollDie);
+    const choices = {
+      ...current.choices,
+      abilityMethod: "rolled" as const,
+      baseAbilityScores: null,
+    };
+    const [row] = await this.db
+      .update(characterDrafts)
+      .set({ abilityRolls, choices, updatedAt: new Date() })
       .where(eq(characterDrafts.id, id))
       .returning();
     if (!row)

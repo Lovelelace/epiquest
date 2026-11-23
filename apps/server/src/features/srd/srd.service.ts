@@ -104,6 +104,25 @@ export class SrdService {
     return srdSummarySchemas[entity].extend(srdDetailExtension).parse(row) as SrdDetail<E>;
   }
 
+  /**
+   * Toutes les entrées d'une entité avec leurs données complètes, sans pagination. Réservé aux
+   * autres features du serveur (assistant de création), qui ont besoin des données brutes.
+   */
+  async listDetails<E extends SrdEntity>(
+    entity: E,
+    filters: SrdFilters<E>,
+  ): Promise<{ slug: string; name: string; data: Record<string, unknown> }[]> {
+    const config = SRD_ENTITIES[entity];
+    const { table } = config;
+    const rows = await this.db
+      .select({ slug: table.slug, name: table.name, data: table.raw })
+      .from(table)
+      .where(and(...config.filters(filters)))
+      .orderBy(asc(table.name));
+    // `raw` est l'entrée source validée à l'import : un objet JSON.
+    return rows as { slug: string; name: string; data: Record<string, unknown> }[];
+  }
+
   /** Version du SRD importée, ou 404 si l'import n'a jamais été lancé. */
   async version(): Promise<SrdVersion> {
     const imported = await getImportedSrdVersion(this.db);

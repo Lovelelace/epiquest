@@ -1,10 +1,12 @@
 import {
   characterDraftSchema,
+  creationOptionsSchema,
   srdDetailExtension,
   srdPageSchema,
   srdSummarySchemas,
   type CharacterDraft,
   type CharacterDraftUpdate,
+  type CreationOptions,
 } from "@epiquest/schemas";
 import { apiRequest } from "@/shared/lib/http";
 
@@ -33,6 +35,16 @@ export function updateDraft(id: string, update: CharacterDraftUpdate): Promise<C
     method: "PATCH",
     body: update,
   });
+}
+
+export function rollAbilities(id: string): Promise<CharacterDraft> {
+  return apiRequest(characterDraftSchema, `/character-drafts/${id}/ability-rolls`, {
+    method: "POST",
+  });
+}
+
+export function getCreationOptions(id: string): Promise<CreationOptions> {
+  return apiRequest(creationOptionsSchema, `/character-drafts/${id}/options`);
 }
 
 /** Toutes les options d'une entité du SRD (au plus une page de 100, suffisant pour les origines). */

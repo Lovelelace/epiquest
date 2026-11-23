@@ -4,6 +4,7 @@ import { DatabaseModule } from "./shared/database/database.module.js";
 import { HealthModule } from "./shared/health/health.module.js";
 import { CharactersModule } from "./features/characters/characters.module.js";
 import { SrdModule } from "./features/srd/srd.module.js";
+import { RandomModule } from "./shared/random/random.module.js";
 import { RealtimeModule } from "./shared/realtime/realtime.module.js";
 
 @Module({
@@ -12,6 +13,7 @@ import { RealtimeModule } from "./shared/realtime/realtime.module.js";
     DatabaseModule,
     HealthModule,
     RealtimeModule,
+    RandomModule,
     // Modules des features : un par dossier de src/features/
     SrdModule,
     CharactersModule,

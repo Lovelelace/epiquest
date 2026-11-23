@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { SrdModule } from "../srd/srd.module.js";
 import { characterDatabaseProvider } from "./character-database.js";
+import { CreationRulesService } from "./creation-rules.service.js";
 import { DraftsController } from "./drafts.controller.js";
 import { DraftsService } from "./drafts.service.js";
 
@@ -8,6 +9,6 @@ import { DraftsService } from "./drafts.service.js";
 @Module({
   imports: [SrdModule],
   controllers: [DraftsController],
-  providers: [DraftsService, characterDatabaseProvider],
+  providers: [DraftsService, CreationRulesService, characterDatabaseProvider],
 })
 export class CharactersModule {}

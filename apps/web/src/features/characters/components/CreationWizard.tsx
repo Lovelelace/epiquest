@@ -2,7 +2,7 @@
 
 import type { CharacterDraft, CharacterDraftUpdate, WizardStep } from "@epiquest/schemas";
 import { useEffect, useRef, useState } from "react";
-import { getDraft, updateDraft } from "../api";
+import { getDraft, rollAbilities, updateDraft } from "../api";
 import { WIZARD_STEPS, type StepContext } from "./wizard-steps";
 
 interface CreationWizardProps {
@@ -55,6 +55,14 @@ export function CreationWizard({ draftId }: CreationWizardProps) {
   const context: StepContext = {
     draft,
     update: (choices) => void save({ choices }),
+    rollAbilities: () => {
+      rollAbilities(draftId)
+        .then((rolled) => {
+          setDraft(rolled);
+          setStatus("Dés lancés : les six valeurs sont prêtes à être réparties.");
+        })
+        .catch(() => setError("Le tirage a échoué. Réessayez."));
+    },
   };
   const previous = WIZARD_STEPS[stepIndex - 1];
   const next = WIZARD_STEPS[stepIndex + 1];
