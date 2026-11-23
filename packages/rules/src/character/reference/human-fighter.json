@@ -1,0 +1,453 @@
+{
+  "$comment": "Personnage de référence calculé à la main (SRD 5.1). Voir README du dossier.",
+  "id": "human-fighter",
+  "name": "Humain guerrier (acolyte)",
+  "levels": {
+    "1": {
+      "build": {
+        "level": 1,
+        "classData": {
+          "index": "fighter",
+          "hitDie": 10,
+          "savingThrows": ["str", "con"],
+          "spellcasting": null,
+          "unarmoredDefense": null
+        },
+        "species": {
+          "index": "human",
+          "speed": 30,
+          "hitPointBonusPerLevel": 0
+        },
+        "baseAbilityScores": {
+          "str": 15,
+          "dex": 14,
+          "con": 13,
+          "int": 8,
+          "wis": 12,
+          "cha": 10
+        },
+        "abilityBonuses": [
+          {
+            "ability": "str",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "dex",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "con",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "int",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "wis",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "cha",
+            "amount": 1,
+            "source": "species"
+          }
+        ],
+        "skillProficiencies": ["athletics", "perception", "insight", "religion"],
+        "skillExpertise": [],
+        "hitPointGains": [],
+        "armor": {
+          "category": "heavy",
+          "baseArmorClass": 16,
+          "dexterityCap": 0,
+          "strengthRequirement": 13,
+          "hasStealthDisadvantage": true
+        },
+        "hasShield": true,
+        "armorClassBonuses": [
+          {
+            "source": "fighting-style-defense",
+            "amount": 1,
+            "requiresArmor": true
+          }
+        ],
+        "carriedWeight": 64
+      },
+      "handCalculation": [
+        "Caractéristiques : base 15/14/13/8/12/10, humain +1 partout → 16/15/14/9/13/11, modificateurs +3/+2/+2/-1/+1/+0.",
+        "Maîtrise : +2 (niveau 1).",
+        "CA : cotte de mailles 16 (Dex ignorée) + bouclier 2 + style Défense 1 = 19.",
+        "PV : d10 max 10 + Con 2 = 12.",
+        "Sauvegardes maîtrisées For +3+2 = +5, Con +2+2 = +4.",
+        "Compétences : Athlétisme +5, Perception +3, Perspicacité +3, Religion -1+2 = +1. Perception passive 13.",
+        "Vitesse 30 (For 16 ≥ 13 requis). Charge 64 lb, capacité 16 × 15 = 240, encombré au-delà de 80 : non."
+      ],
+      "expected": {
+        "level": 1,
+        "abilityScores": {
+          "str": 16,
+          "dex": 15,
+          "con": 14,
+          "int": 9,
+          "wis": 13,
+          "cha": 11
+        },
+        "abilityModifiers": {
+          "str": 3,
+          "dex": 2,
+          "con": 2,
+          "int": -1,
+          "wis": 1,
+          "cha": 0
+        },
+        "proficiencyBonus": 2,
+        "savingThrows": {
+          "str": {
+            "modifier": 5,
+            "proficiency": "proficient"
+          },
+          "dex": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "con": {
+            "modifier": 4,
+            "proficiency": "proficient"
+          },
+          "int": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "wis": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "cha": {
+            "modifier": 0,
+            "proficiency": "none"
+          }
+        },
+        "skills": {
+          "acrobatics": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "animal-handling": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "arcana": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "athletics": {
+            "modifier": 5,
+            "proficiency": "proficient"
+          },
+          "deception": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "history": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "insight": {
+            "modifier": 3,
+            "proficiency": "proficient"
+          },
+          "intimidation": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "investigation": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "medicine": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "nature": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "perception": {
+            "modifier": 3,
+            "proficiency": "proficient"
+          },
+          "performance": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "persuasion": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "religion": {
+            "modifier": 1,
+            "proficiency": "proficient"
+          },
+          "sleight-of-hand": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "stealth": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "survival": {
+            "modifier": 1,
+            "proficiency": "none"
+          }
+        },
+        "armorClass": 19,
+        "hasStealthDisadvantage": true,
+        "hitPointMaximum": 12,
+        "hitDice": {
+          "die": 10,
+          "count": 1
+        },
+        "initiative": 2,
+        "speed": 30,
+        "passivePerception": 13,
+        "spellcasting": null,
+        "carrying": {
+          "weight": 64,
+          "capacity": 240,
+          "encumbrance": "none"
+        }
+      }
+    },
+    "5": {
+      "build": {
+        "level": 5,
+        "classData": {
+          "index": "fighter",
+          "hitDie": 10,
+          "savingThrows": ["str", "con"],
+          "spellcasting": null,
+          "unarmoredDefense": null
+        },
+        "species": {
+          "index": "human",
+          "speed": 30,
+          "hitPointBonusPerLevel": 0
+        },
+        "baseAbilityScores": {
+          "str": 15,
+          "dex": 14,
+          "con": 13,
+          "int": 8,
+          "wis": 12,
+          "cha": 10
+        },
+        "abilityBonuses": [
+          {
+            "ability": "str",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "dex",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "con",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "int",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "wis",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "cha",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "str",
+            "amount": 2,
+            "source": "ability-score-improvement"
+          }
+        ],
+        "skillProficiencies": ["athletics", "perception", "insight", "religion"],
+        "skillExpertise": [],
+        "hitPointGains": [6, 6, 6, 6],
+        "armor": {
+          "category": "heavy",
+          "baseArmorClass": 16,
+          "dexterityCap": 0,
+          "strengthRequirement": 13,
+          "hasStealthDisadvantage": true
+        },
+        "hasShield": true,
+        "armorClassBonuses": [
+          {
+            "source": "fighting-style-defense",
+            "amount": 1,
+            "requiresArmor": true
+          }
+        ],
+        "carriedWeight": 64
+      },
+      "handCalculation": [
+        "Augmentation au niveau 4 : For +2 → 18 (+4). Maîtrise +3.",
+        "CA : 19 (inchangée).",
+        "PV : 12 + 4 × (moyenne d10 6 + Con 2) = 12 + 32 = 44.",
+        "Sauvegardes For +4+3 = +7, Con +2+3 = +5.",
+        "Compétences : Athlétisme +7, Perception +4, Perspicacité +4, Religion +2. Perception passive 14.",
+        "Charge 64 lb, capacité 18 × 15 = 270, encombré au-delà de 90 : non."
+      ],
+      "expected": {
+        "level": 5,
+        "abilityScores": {
+          "str": 18,
+          "dex": 15,
+          "con": 14,
+          "int": 9,
+          "wis": 13,
+          "cha": 11
+        },
+        "abilityModifiers": {
+          "str": 4,
+          "dex": 2,
+          "con": 2,
+          "int": -1,
+          "wis": 1,
+          "cha": 0
+        },
+        "proficiencyBonus": 3,
+        "savingThrows": {
+          "str": {
+            "modifier": 7,
+            "proficiency": "proficient"
+          },
+          "dex": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "con": {
+            "modifier": 5,
+            "proficiency": "proficient"
+          },
+          "int": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "wis": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "cha": {
+            "modifier": 0,
+            "proficiency": "none"
+          }
+        },
+        "skills": {
+          "acrobatics": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "animal-handling": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "arcana": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "athletics": {
+            "modifier": 7,
+            "proficiency": "proficient"
+          },
+          "deception": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "history": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "insight": {
+            "modifier": 4,
+            "proficiency": "proficient"
+          },
+          "intimidation": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "investigation": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "medicine": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "nature": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "perception": {
+            "modifier": 4,
+            "proficiency": "proficient"
+          },
+          "performance": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "persuasion": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "religion": {
+            "modifier": 2,
+            "proficiency": "proficient"
+          },
+          "sleight-of-hand": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "stealth": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "survival": {
+            "modifier": 1,
+            "proficiency": "none"
+          }
+        },
+        "armorClass": 19,
+        "hasStealthDisadvantage": true,
+        "hitPointMaximum": 44,
+        "hitDice": {
+          "die": 10,
+          "count": 5
+        },
+        "initiative": 2,
+        "speed": 30,
+        "passivePerception": 14,
+        "spellcasting": null,
+        "carrying": {
+          "weight": 64,
+          "capacity": 270,
+          "encumbrance": "none"
+        }
+      }
+    }
+  }
+}

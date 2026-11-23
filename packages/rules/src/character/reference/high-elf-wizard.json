@@ -1,0 +1,410 @@
+{
+  "$comment": "Personnage de référence calculé à la main (SRD 5.1). Voir README du dossier.",
+  "id": "high-elf-wizard",
+  "name": "Haut-elfe magicien (acolyte)",
+  "levels": {
+    "1": {
+      "build": {
+        "level": 1,
+        "classData": {
+          "index": "wizard",
+          "hitDie": 6,
+          "savingThrows": ["int", "wis"],
+          "spellcasting": {
+            "ability": "int",
+            "progression": "full"
+          },
+          "unarmoredDefense": null
+        },
+        "species": {
+          "index": "high-elf",
+          "speed": 30,
+          "hitPointBonusPerLevel": 0
+        },
+        "baseAbilityScores": {
+          "str": 8,
+          "dex": 13,
+          "con": 14,
+          "int": 15,
+          "wis": 12,
+          "cha": 10
+        },
+        "abilityBonuses": [
+          {
+            "ability": "dex",
+            "amount": 2,
+            "source": "species"
+          },
+          {
+            "ability": "int",
+            "amount": 1,
+            "source": "species"
+          }
+        ],
+        "skillProficiencies": ["perception", "arcana", "investigation", "insight", "religion"],
+        "skillExpertise": [],
+        "hitPointGains": [],
+        "armor": null,
+        "hasShield": false,
+        "armorClassBonuses": [],
+        "carriedWeight": 10
+      },
+      "handCalculation": [
+        "Caractéristiques : base 8/13/14/15/12/10, elfe Dex +2, haut-elfe Int +1 → 8/15/14/16/12/10, modificateurs -1/+2/+2/+3/+1/+0.",
+        "CA : sans armure 10 + Dex 2 = 12.",
+        "PV : d6 max 6 + Con 2 = 8.",
+        "Sauvegardes Int +5, Sag +3.",
+        "Compétences : Perception (Sens aiguisés) +3, Arcanes +5, Investigation +5, Perspicacité +3, Religion +5. Perception passive 13.",
+        "Sorts : DD 8 + 2 + 3 = 13, attaque +5, 2 emplacements du 1er niveau.",
+        "Charge 10 lb, capacité 8 × 15 = 120, encombré au-delà de 40 : non."
+      ],
+      "expected": {
+        "level": 1,
+        "abilityScores": {
+          "str": 8,
+          "dex": 15,
+          "con": 14,
+          "int": 16,
+          "wis": 12,
+          "cha": 10
+        },
+        "abilityModifiers": {
+          "str": -1,
+          "dex": 2,
+          "con": 2,
+          "int": 3,
+          "wis": 1,
+          "cha": 0
+        },
+        "proficiencyBonus": 2,
+        "savingThrows": {
+          "str": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "dex": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "con": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "int": {
+            "modifier": 5,
+            "proficiency": "proficient"
+          },
+          "wis": {
+            "modifier": 3,
+            "proficiency": "proficient"
+          },
+          "cha": {
+            "modifier": 0,
+            "proficiency": "none"
+          }
+        },
+        "skills": {
+          "acrobatics": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "animal-handling": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "arcana": {
+            "modifier": 5,
+            "proficiency": "proficient"
+          },
+          "athletics": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "deception": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "history": {
+            "modifier": 3,
+            "proficiency": "none"
+          },
+          "insight": {
+            "modifier": 3,
+            "proficiency": "proficient"
+          },
+          "intimidation": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "investigation": {
+            "modifier": 5,
+            "proficiency": "proficient"
+          },
+          "medicine": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "nature": {
+            "modifier": 3,
+            "proficiency": "none"
+          },
+          "perception": {
+            "modifier": 3,
+            "proficiency": "proficient"
+          },
+          "performance": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "persuasion": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "religion": {
+            "modifier": 5,
+            "proficiency": "proficient"
+          },
+          "sleight-of-hand": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "stealth": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "survival": {
+            "modifier": 1,
+            "proficiency": "none"
+          }
+        },
+        "armorClass": 12,
+        "hasStealthDisadvantage": false,
+        "hitPointMaximum": 8,
+        "hitDice": {
+          "die": 6,
+          "count": 1
+        },
+        "initiative": 2,
+        "speed": 30,
+        "passivePerception": 13,
+        "spellcasting": {
+          "ability": "int",
+          "saveDc": 13,
+          "attackBonus": 5,
+          "slots": {
+            "slots": [2],
+            "pact": null
+          }
+        },
+        "carrying": {
+          "weight": 10,
+          "capacity": 120,
+          "encumbrance": "none"
+        }
+      }
+    },
+    "5": {
+      "build": {
+        "level": 5,
+        "classData": {
+          "index": "wizard",
+          "hitDie": 6,
+          "savingThrows": ["int", "wis"],
+          "spellcasting": {
+            "ability": "int",
+            "progression": "full"
+          },
+          "unarmoredDefense": null
+        },
+        "species": {
+          "index": "high-elf",
+          "speed": 30,
+          "hitPointBonusPerLevel": 0
+        },
+        "baseAbilityScores": {
+          "str": 8,
+          "dex": 13,
+          "con": 14,
+          "int": 15,
+          "wis": 12,
+          "cha": 10
+        },
+        "abilityBonuses": [
+          {
+            "ability": "dex",
+            "amount": 2,
+            "source": "species"
+          },
+          {
+            "ability": "int",
+            "amount": 1,
+            "source": "species"
+          },
+          {
+            "ability": "int",
+            "amount": 2,
+            "source": "ability-score-improvement"
+          }
+        ],
+        "skillProficiencies": ["perception", "arcana", "investigation", "insight", "religion"],
+        "skillExpertise": [],
+        "hitPointGains": [4, 4, 4, 4],
+        "armor": null,
+        "hasShield": false,
+        "armorClassBonuses": [],
+        "carriedWeight": 10
+      },
+      "handCalculation": [
+        "Augmentation au niveau 4 : Int +2 → 18 (+4). Maîtrise +3.",
+        "PV : 8 + 4 × (moyenne d6 4 + Con 2) = 8 + 24 = 32.",
+        "Sauvegardes Int +7, Sag +4.",
+        "Compétences : Arcanes +7, Investigation +7, Religion +7, Perception +4, Perspicacité +4. Perception passive 14.",
+        "Sorts : DD 8 + 3 + 4 = 15, attaque +7, emplacements 4/3/2."
+      ],
+      "expected": {
+        "level": 5,
+        "abilityScores": {
+          "str": 8,
+          "dex": 15,
+          "con": 14,
+          "int": 18,
+          "wis": 12,
+          "cha": 10
+        },
+        "abilityModifiers": {
+          "str": -1,
+          "dex": 2,
+          "con": 2,
+          "int": 4,
+          "wis": 1,
+          "cha": 0
+        },
+        "proficiencyBonus": 3,
+        "savingThrows": {
+          "str": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "dex": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "con": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "int": {
+            "modifier": 7,
+            "proficiency": "proficient"
+          },
+          "wis": {
+            "modifier": 4,
+            "proficiency": "proficient"
+          },
+          "cha": {
+            "modifier": 0,
+            "proficiency": "none"
+          }
+        },
+        "skills": {
+          "acrobatics": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "animal-handling": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "arcana": {
+            "modifier": 7,
+            "proficiency": "proficient"
+          },
+          "athletics": {
+            "modifier": -1,
+            "proficiency": "none"
+          },
+          "deception": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "history": {
+            "modifier": 4,
+            "proficiency": "none"
+          },
+          "insight": {
+            "modifier": 4,
+            "proficiency": "proficient"
+          },
+          "intimidation": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "investigation": {
+            "modifier": 7,
+            "proficiency": "proficient"
+          },
+          "medicine": {
+            "modifier": 1,
+            "proficiency": "none"
+          },
+          "nature": {
+            "modifier": 4,
+            "proficiency": "none"
+          },
+          "perception": {
+            "modifier": 4,
+            "proficiency": "proficient"
+          },
+          "performance": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "persuasion": {
+            "modifier": 0,
+            "proficiency": "none"
+          },
+          "religion": {
+            "modifier": 7,
+            "proficiency": "proficient"
+          },
+          "sleight-of-hand": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "stealth": {
+            "modifier": 2,
+            "proficiency": "none"
+          },
+          "survival": {
+            "modifier": 1,
+            "proficiency": "none"
+          }
+        },
+        "armorClass": 12,
+        "hasStealthDisadvantage": false,
+        "hitPointMaximum": 32,
+        "hitDice": {
+          "die": 6,
+          "count": 5
+        },
+        "initiative": 2,
+        "speed": 30,
+        "passivePerception": 14,
+        "spellcasting": {
+          "ability": "int",
+          "saveDc": 15,
+          "attackBonus": 7,
+          "slots": {
+            "slots": [4, 3, 2],
+            "pact": null
+          }
+        },
+        "carrying": {
+          "weight": 10,
+          "capacity": 120,
+          "encumbrance": "none"
+        }
+      }
+    }
+  }
+}
