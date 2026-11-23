@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "./shared/config/config.module.js";
 import { DatabaseModule } from "./shared/database/database.module.js";
 import { HealthModule } from "./shared/health/health.module.js";
+import { CharactersModule } from "./features/characters/characters.module.js";
 import { SrdModule } from "./features/srd/srd.module.js";
 import { RealtimeModule } from "./shared/realtime/realtime.module.js";
 
@@ -13,6 +14,7 @@ import { RealtimeModule } from "./shared/realtime/realtime.module.js";
     RealtimeModule,
     // Modules des features : un par dossier de src/features/
     SrdModule,
+    CharactersModule,
   ],
 })
 export class AppModule {}

@@ -2,7 +2,7 @@
   "name": "@epiquest/server",
   "version": "0.0.0",
   "private": true,
-  "description": "API et temps réel (NestJS + Socket.IO) : le serveur fait autorité",
+  "description": "API et temps r\u00e9el (NestJS + Socket.IO) : le serveur fait autorit\u00e9",
   "type": "module",
   "scripts": {
     "build": "nest build -p tsconfig.build.json",
@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@epiquest/db": "workspace:*",
+    "@epiquest/rules": "workspace:*",
     "@epiquest/schemas": "workspace:*",
     "@nestjs/common": "^12.6.0",
     "@nestjs/core": "^12.6.0",

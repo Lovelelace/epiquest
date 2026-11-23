@@ -13,10 +13,12 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
+    "@epiquest/rules": "workspace:*",
     "@epiquest/schemas": "workspace:*",
     "next": "^16.4.6",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.5",

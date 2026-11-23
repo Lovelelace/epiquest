@@ -6,3 +6,4 @@
  * drizzle-kit lit ce fichier pour générer les migrations.
  */
 export * from "./srd/index.js";
+export * from "./characters.js";
