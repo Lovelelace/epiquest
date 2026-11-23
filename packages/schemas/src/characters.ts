@@ -252,13 +252,17 @@ export const characterRollRequestSchema = z.object({
   visibility: rollVisibilitySchema.default("public"),
 });
 
+/**
+ * Jet tel qu'un destinataire le voit. Pour un jet caché, le joueur sait qu'un jet a eu lieu mais
+ * ne reçoit ni les dés ni le total (SEC-08) : `dice` est vide et `total` vaut `null`.
+ */
 export const characterRollSchema = z.object({
   id: z.uuid(),
   label: z.string(),
   expression: z.string(),
   dice: z.array(z.object({ sides: z.number().int(), value: z.number().int() })),
   modifier: z.number().int(),
-  total: z.number().int(),
+  total: z.number().int().nullable(),
   visibility: rollVisibilitySchema,
   rolledAt: isoDate,
 });
