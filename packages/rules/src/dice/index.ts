@@ -16,4 +16,5 @@ export {
   MAX_EXPRESSION_LENGTH,
 } from "./limits.js";
 export type { DieSize } from "./limits.js";
+export { formatDiceExpression } from "./format.js";
 export { parseDiceExpression } from "./parser.js";
