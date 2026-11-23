@@ -26,10 +26,11 @@ feat/42-analyseur-des ──PR──▶ develop ──PR de release──▶ mai
 
 ## Pipelines
 
-| Workflow | Déclencheur                                     | Étapes                                                                                                                                                           |
-| -------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ci.yml` | PR vers `develop` ou `main`, push sur `develop` | Installation verrouillée, lint, types, tests, build ; vérification des messages de commit ; scan de secrets (gitleaks) ; build de l'image Docker (cible `build`) |
-| `cd.yml` | Push sur `main`, ou lancement manuel            | Mêmes vérifications, puis déploiement via le secret `DEPLOY_HOOK_URL` (environnement GitHub `production`)                                                        |
+| Workflow                    | Déclencheur                                     | Étapes                                                                                                                                                           |
+| --------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ci.yml`                    | PR vers `develop` ou `main`, push sur `develop` | Installation verrouillée, lint, types, tests, build ; vérification des messages de commit ; scan de secrets (gitleaks) ; build de l'image Docker (cible `build`) |
+| `cd.yml`                    | Push sur `main`, ou lancement manuel            | Mêmes vérifications, puis déploiement via le secret `DEPLOY_HOOK_URL` (environnement GitHub `production`)                                                        |
+| `dependabot-auto-merge.yml` | PR ouverte par Dependabot                       | Approuve et active l'auto-merge (squash) des mises à jour mineures et correctives ; les majeures restent à relire                                                |
 
 Les secrets du pipeline sont stockés dans **Settings → Secrets and variables → Actions**, jamais
 dans le code. Tant que l'hébergeur n'est pas choisi, l'étape de déploiement affiche un
@@ -37,6 +38,20 @@ avertissement et ne fait rien.
 
 À venir : build de l'APK Android en artefact (M1), tests end-to-end et audit d'accessibilité
 automatisé (axe) dans la CI, publication de la documentation sur GitHub Pages.
+
+## Mises à jour de dépendances (Dependabot)
+
+Dependabot vérifie les dépendances npm et les actions GitHub chaque lundi à 6 h et ouvre au
+plus une PR groupée par catégorie vers `develop` :
+
+- npm, mises à jour mineures et correctives : approuvées par le bot `github-actions`, puis
+  fusionnées automatiquement dès que toutes les vérifications obligatoires sont vertes ;
+- npm, mises à jour majeures : une PR à relire et merger à la main (risque de rupture) ;
+- actions GitHub : une PR groupée, fusionnée automatiquement si elle ne contient que du mineur
+  ou du correctif, sinon à relire.
+
+Cela demande deux réglages du dépôt : **Settings → General → Allow auto-merge** et
+**Settings → Actions → General → Allow GitHub Actions to create and approve pull requests**.
 
 ## Vérifications obligatoires
 
