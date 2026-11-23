@@ -1,0 +1,5 @@
+export { createDatabase } from "./client.js";
+export type { Database, DatabaseConnection } from "./client.js";
+export { getDatabaseUrl, loadRootEnvFile } from "./env.js";
+export { migrationsFolder } from "./paths.js";
+export * as schema from "./schema/index.js";

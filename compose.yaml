@@ -1,10 +1,14 @@
 # Environnement de développement local.
-#   docker compose watch             → base + mode watch : sources synchronisées, rebuild
-#                                      et tests relancés à chaque modification
+#   docker compose watch             → base + migrations + API (3000) et web (3001) en mode watch :
+#                                      sources synchronisées, rebuild et tests relancés à chaque modification
 #   docker compose up -d db          → base PostgreSQL seule
 #   docker compose run --rm dev      → lance tous les tests dans un conteneur
 #   docker compose run --rm dev sh   → shell avec Node 22 et pnpm, sources montées
+# L'application mobile ne tourne pas dans Docker : voir apps/mobile/README.md.
 name: epiquest
+
+x-app-environment: &app-environment
+  DATABASE_URL: postgres://epiquest:epiquest@db:5432/epiquest
 
 services:
   db:
@@ -23,6 +27,22 @@ services:
       timeout: 3s
       retries: 10
 
+  # Applique les migrations Drizzle, puis s'arrête. Le seed et l'import du SRD s'y ajouteront.
+  migrate:
+    build:
+      context: .
+      target: dev
+    command: ["pnpm", "--filter", "@epiquest/db", "migrate"]
+    environment: *app-environment
+    depends_on:
+      db:
+        condition: service_healthy
+    develop:
+      watch:
+        # Nouvelle migration : l'image est reconstruite et les migrations sont rejouées.
+        - action: rebuild
+          path: ./apps/db/migrations
+
   # Conteneur à la demande (tests ponctuels, shell). Profil « tools » : il n'est pas
   # démarré par `docker compose up` ni `watch`, mais `docker compose run dev` l'active.
   dev:
@@ -30,19 +50,23 @@ services:
     build:
       context: .
       target: dev
-    environment:
-      DATABASE_URL: postgres://epiquest:epiquest@db:5432/epiquest
+    environment: *app-environment
     volumes:
       - .:/app
       - /app/node_modules
+      - /app/apps/db/node_modules
+      - /app/apps/mobile/node_modules
+      - /app/apps/server/node_modules
+      - /app/apps/web/node_modules
       - /app/packages/rules/node_modules
+      - /app/packages/schemas/node_modules
     depends_on:
       db:
         condition: service_healthy
 
-  # Mode watch (`docker compose watch`) : lance `pnpm dev` (build incrémental + tests
-  # en continu de tous les paquets). Pas de montage des sources : Compose les copie
-  # dans le conteneur à chaque modification, ce qui déclenche les watchers de façon
+  # Mode watch (`docker compose watch`) : lance `pnpm dev` (API NestJS, web Next.js, build
+  # incrémental et tests en continu des paquets). Pas de montage des sources : Compose les
+  # copie dans le conteneur à chaque modification, ce qui déclenche les watchers de façon
   # fiable sur macOS et Windows.
   watch:
     build:
@@ -51,15 +75,20 @@ services:
     command: ["pnpm", "dev", "--ui=stream"]
     init: true
     environment:
-      DATABASE_URL: postgres://epiquest:epiquest@db:5432/epiquest
-      TURBO_TELEMETRY_DISABLED: "1"
+      <<: *app-environment
+      PORT: "3000"
+      WEB_ORIGIN: http://localhost:3001
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+    ports:
+      - "3000:3000" # API NestJS + Socket.IO
+      - "3001:3001" # Web Next.js
     depends_on:
-      db:
-        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     develop:
       watch:
         # Code source des paquets et des apps : copié tel quel, les watchers
-        # (tsc, vitest, puis serveur et web) prennent le relais.
+        # (tsc, vitest, NestJS, Next.js) prennent le relais.
         - action: sync
           path: ./packages
           target: /app/packages
@@ -68,6 +97,8 @@ services:
             - "**/dist/"
             - "**/coverage/"
             - "**/.turbo/"
+            - "**/.next/"
+            - "**/.expo/"
         - action: sync
           path: ./apps
           target: /app/apps

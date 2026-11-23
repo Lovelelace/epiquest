@@ -13,6 +13,7 @@
 - **ARCH-04** — Les dépendances vont toujours dans le même sens : `apps/*` → `packages/*`. Un package NE DOIT JAMAIS importer une app.
 - **ARCH-05** — Les dépendances circulaires entre packages sont interdites.
 - **ARCH-06** — Une app NE DOIT PAS importer le code d'une autre app. Ce qui doit être partagé descend dans un package.
+  - **Exception** : `apps/db` (schéma Drizzle, migrations, seed, import du SRD) PEUT être importée par `apps/server`, et uniquement par elle. Voir l'ADR 0002.
 - **ARCH-07** — Un package n'expose que ce qui est exporté par son point d'entrée (`index.ts`). On NE DOIT PAS importer un fichier interne d'un autre package (`@epiquest/x/src/...`).
 
 ## Logique pure, effets en bordure

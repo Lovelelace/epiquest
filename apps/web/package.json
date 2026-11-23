@@ -1,0 +1,36 @@
+{
+  "name": "@epiquest/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Client web : vue MJ, vue joueurs et gestion des personnages (Next.js)",
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev --port 3001",
+    "start": "next start --port 3001",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@epiquest/schemas": "workspace:*",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.5",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "axe-core": "^4.14.1",
+    "jsdom": "^31.0.1",
+    "postcss": "^8.5.33",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.1"
+  }
+}

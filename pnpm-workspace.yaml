@@ -1,3 +1,10 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# Scripts d'installation non exécutés (pnpm 10 les bloque par défaut) : ces paquets
+# fonctionnent avec leurs binaires précompilés. Tout ajout ici est relu en PR.
+ignoredBuiltDependencies:
+  - "@parcel/watcher"
+  - "@swc/core"
+  - esbuild

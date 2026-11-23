@@ -23,16 +23,17 @@ joueurs). Web et application mobile.
 
 ## État du projet
 
-Jalon **M0 Fondations** en cours : monorepo, CI/CD et conventions. Le serveur, le web et l'app
-mobile arrivent aux jalons suivants (voir le tableau GitHub Projects).
+Jalon **M0 Fondations** en cours : monorepo, CI/CD, conventions et squelettes des applications.
+Les features arrivent aux jalons suivants (voir le tableau GitHub Projects).
 
-| Élément                | État                                         |
-| ---------------------- | -------------------------------------------- |
-| Moteur de règles       | Premiers calculs (modificateurs, maîtrise)   |
-| Serveur                | À venir (M1)                                 |
-| Web                    | À venir (M1)                                 |
-| Application mobile     | À venir (M1)                                 |
-| Environnement en ligne | URL fournie ici après le premier déploiement |
+| Élément                | État                                                      |
+| ---------------------- | --------------------------------------------------------- |
+| Moteur de règles       | Premiers calculs (modificateurs, maîtrise)                |
+| Serveur (NestJS)       | Squelette : `GET /health`, Socket.IO, connexion à la base |
+| Base (Drizzle)         | Squelette : migration initiale vide, migrations auto      |
+| Web (Next.js)          | Squelette : page d'accueil                                |
+| Application mobile     | Squelette Expo Router (Android) : écran d'accueil         |
+| Environnement en ligne | URL fournie ici après le premier déploiement              |
 
 ## Prérequis
 
@@ -67,16 +68,28 @@ docker compose run --rm dev sh       # shell avec Node 22 et pnpm, sources mont�
 ### Développer en mode watch
 
 ```bash
-docker compose watch                 # base + build incrémental et tests relancés à chaque modification
+docker compose watch                 # base, migrations, API et web avec rechargement automatique
 ```
 
-Compose copie dans le conteneur chaque fichier modifié dans `packages/` et `apps/`, et le build
-et les tests se relancent automatiquement. Une modification de `turbo.json` ou de
+| Service    | Adresse               |
+| ---------- | --------------------- |
+| API NestJS | http://localhost:3000 |
+| Web        | http://localhost:3001 |
+| PostgreSQL | localhost:5432        |
+
+Les migrations s'appliquent automatiquement au démarrage (service `migrate`), puis à chaque
+nouvelle migration. Compose copie dans le conteneur chaque fichier modifié dans `packages/` et
+`apps/` : l'API, le web, le build et les tests se relancent automatiquement. Une modification de `turbo.json` ou de
 `tsconfig.base.json` redémarre le conteneur. Une modification des dépendances (`package.json`
 racine, `pnpm-lock.yaml`, `pnpm-workspace.yaml`) reconstruit l'image. `Ctrl+C` arrête le watch.
 Docker Compose 2.22 ou plus récent est requis.
 
-Sans Docker, l'équivalent est `pnpm dev`.
+Sans Docker : démarrer la base (`docker compose up -d db` ou un PostgreSQL local), appliquer les
+migrations avec `pnpm --filter @epiquest/db migrate`, puis lancer `pnpm dev`. Le serveur et les
+scripts de la base lisent le fichier `.env` de la racine.
+
+L'application mobile se lance à part, hors Docker : voir
+[apps/mobile/README.md](apps/mobile/README.md).
 
 Les identifiants de la base de développement sont ceux de `.env.example`. Ils ne servent qu'en
 local.
@@ -91,22 +104,30 @@ pnpm test
 
 Autres commandes utiles :
 
-| Commande         | Rôle                                  |
-| ---------------- | ------------------------------------- |
-| `pnpm lint`      | ESLint et vérification Prettier       |
-| `pnpm format`    | Formate tout le code avec Prettier    |
-| `pnpm typecheck` | Vérification des types TypeScript     |
-| `pnpm build`     | Build de tous les paquets             |
-| `pnpm dev`       | Build incrémental et tests en continu |
+| Commande         | Rôle                                                          |
+| ---------------- | ------------------------------------------------------------- |
+| `pnpm lint`      | ESLint et vérification Prettier                               |
+| `pnpm format`    | Formate tout le code avec Prettier                            |
+| `pnpm typecheck` | Vérification des types TypeScript                             |
+| `pnpm build`     | Build de tous les paquets                                     |
+| `pnpm dev`       | API, web, build incrémental et tests en continu (hors mobile) |
 
 Lancer les tests d'un seul paquet : `pnpm --filter @epiquest/rules test`.
 Lancer un seul fichier de test : `pnpm --filter @epiquest/rules exec vitest run src/abilities.test.ts`.
 
+Dans chaque app, le code est rangé par feature : `src/features/<feature>/`, plus `src/shared/`
+pour ce qui est transverse. Chaque dossier `features/` a un README qui décrit la convention.
+
 ## Structure du dépôt
 
 ```text
-apps/              Applications (serveur, web, mobile) — à venir
+apps/server/       API NestJS + Socket.IO (le serveur fait autorité)
+apps/web/          Client web Next.js (App Router, Tailwind) : vues MJ et joueurs
+apps/mobile/       Application Android Expo (Expo Router)
+apps/db/           Base de données : schéma Drizzle, migrations, seed, import du SRD
 packages/rules/    Moteur de règles partagé (TypeScript pur)
+packages/schemas/  Contrats zod partagés entre serveur, web et mobile
+specs/             Règles générales de développement
 docs/              Documentation utilisateur et technique, décisions (ADR)
 .github/           CI/CD, modèles d'issue et de pull request
 ```

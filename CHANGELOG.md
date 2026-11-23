@@ -8,6 +8,10 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 
 ### Ajouté
 
+- Squelettes des applications : `apps/server` (NestJS, Socket.IO, `GET /health`), `apps/web` (Next.js App Router, Tailwind), `apps/mobile` (Expo Router, Android), `apps/db` (Drizzle, migration initiale, script de migration).
+- Paquet `@epiquest/schemas` : contrats zod partagés.
+- Docker Compose : service `migrate` (migrations automatiques), API et web exposés en mode watch sur les ports 3000 et 3001.
+- ADR 0002 : stack des applications et rangement du code par feature.
 - Monorepo pnpm + Turborepo, TypeScript strict, ESLint, Prettier.
 - Hooks Git : lint-staged et commitlint (Conventional Commits).
 - Pipelines CI (PR vers `develop` et `main`) et CD (push sur `main`).
