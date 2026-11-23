@@ -234,6 +234,12 @@ export const characterSchema = z.object({
   updatedAt: isoDate,
 });
 
+/** Aperçu du récapitulatif : erreurs restantes et statistiques calculées (`GET …/preview`). */
+export const creationPreviewSchema = z.object({
+  violations: z.array(ruleViolationSchema),
+  statistics: derivedStatisticsSchema.nullable(),
+});
+
 // ---------------------------------------------------------------------------
 // Jets depuis la fiche (#34)
 
@@ -330,6 +336,7 @@ export type CharacterDraft = z.infer<typeof characterDraftSchema>;
 export type CharacterDraftUpdate = z.infer<typeof characterDraftUpdateSchema>;
 export type CreationOptions = z.infer<typeof creationOptionsSchema>;
 export type DerivedStatisticsContract = z.infer<typeof derivedStatisticsSchema>;
+export type CreationPreview = z.infer<typeof creationPreviewSchema>;
 export type Coins = z.infer<typeof coinsSchema>;
 export type InventoryItem = z.infer<typeof inventoryItemSchema>;
 export type CharacterState = z.infer<typeof characterStateSchema>;
