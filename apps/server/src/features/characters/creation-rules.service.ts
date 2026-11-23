@@ -101,9 +101,13 @@ export class CreationRulesService {
           ]
         : DEFAULT_ABILITY_MODIFIER;
       const maxSpellLevel = highestSpellLevel(spellSlots(spellcasting.progression, level));
-      const spellList = spells
-        .map((spell) => ({ slug: spell.slug, name: spell.name, level: Number(spell.data.level) }))
-        .filter((spell) => spell.level <= maxSpellLevel);
+      const classSpells = spells.map((spell) => ({
+        slug: spell.slug,
+        name: spell.name,
+        level: Number(spell.data.level),
+      }));
+      // La validation connaît toute la liste (pour signaler un niveau trop élevé) ; l'écran ne propose que l'accessible.
+      const spellList = classSpells.filter((spell) => spell.level <= maxSpellLevel);
       const counts = {
         cantripsKnown: cantripsKnown(spellcasting, level),
         maxSpells: maxSpells(spellcasting, level, modifier),
@@ -111,7 +115,7 @@ export class CreationRulesService {
       resolvedSpellcasting = {
         progression: spellcasting.progression,
         ...counts,
-        spellList: spellList.map((spell) => ({ index: spell.slug, level: spell.level })),
+        spellList: classSpells.map((spell) => ({ index: spell.slug, level: spell.level })),
       };
       optionSpellcasting = { ability: spellcasting.ability, ...counts, maxSpellLevel, spellList };
     }

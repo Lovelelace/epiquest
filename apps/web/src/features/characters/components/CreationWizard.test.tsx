@@ -2,6 +2,8 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import axe from "axe-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { mockApi } from "../test-api";
+
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), replace: vi.fn() }) }));
 import { CreationWizard } from "./CreationWizard";
 
 afterEach(() => {
