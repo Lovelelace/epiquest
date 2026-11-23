@@ -1,7 +1,7 @@
 # EpiQuest (nom provisoire)
 
-[![CI](https://github.com/axel-gallard/epiquest/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/axel-gallard/epiquest/actions/workflows/ci.yml)
-[![CD](https://github.com/axel-gallard/epiquest/actions/workflows/cd.yml/badge.svg?branch=main)](https://github.com/axel-gallard/epiquest/actions/workflows/cd.yml)
+[![CI](https://github.com/lovelelace/epiquest/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/lovelelace/epiquest/actions/workflows/ci.yml)
+[![CD](https://github.com/lovelelace/epiquest/actions/workflows/cd.yml/badge.svg?branch=main)](https://github.com/lovelelace/epiquest/actions/workflows/cd.yml)
 
 Table de jeu de rôle virtuelle **compatible 5e édition** : création de personnages, dés, cartes
 avec brouillard de guerre et ligne de vue, combat assisté, et deux vues synchronisées (MJ et
@@ -45,7 +45,7 @@ Docker sera nécessaire à partir du jalon M1 (base PostgreSQL de développement
 ## Installation
 
 ```bash
-git clone https://github.com/axel-gallard/epiquest.git
+git clone https://github.com/lovelelace/epiquest.git
 cd epiquest
 corepack enable
 pnpm install
