@@ -1,0 +1,39 @@
+# Environnement de développement local.
+#   docker compose up -d db          → base PostgreSQL seule
+#   docker compose run --rm dev      → lance tous les tests dans un conteneur
+#   docker compose run --rm dev sh   → shell avec Node 22 et pnpm
+name: epiquest
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: epiquest
+      POSTGRES_PASSWORD: epiquest
+      POSTGRES_DB: epiquest
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U epiquest -d epiquest"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  dev:
+    build:
+      context: .
+      target: dev
+    environment:
+      DATABASE_URL: postgres://epiquest:epiquest@db:5432/epiquest
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/packages/rules/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:

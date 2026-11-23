@@ -12,4 +12,5 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 - Hooks Git : lint-staged et commitlint (Conventional Commits).
 - Pipelines CI (PR vers `develop` et `main`) et CD (push sur `main`).
 - Paquet `@epiquest/rules` : modificateur de caractéristique et bonus de maîtrise, avec tests.
+- Docker : `Dockerfile` multi-étapes (dev, build) et `compose.yaml` (PostgreSQL 16 + conteneur de dev), build de l'image vérifié en CI.
 - Fichiers de projet : README, CONTRIBUTING, code de conduite, licence, mentions SRD, modèles.
