@@ -2,7 +2,7 @@
   "name": "@epiquest/schemas",
   "version": "0.0.0",
   "private": true,
-  "description": "Contrats zod partagés entre le serveur, le web et le mobile",
+  "description": "Contrats zod partag\u00e9s entre le serveur, le web et le mobile",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -20,6 +20,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
+    "@epiquest/rules": "workspace:*",
     "zod": "^4.6.7"
   },
   "devDependencies": {
