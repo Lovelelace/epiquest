@@ -10,6 +10,7 @@ WORKDIR /app
 # Dépendances : seuls les manifestes sont copiés pour profiter du cache Docker
 FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Ajouter ici le package.json de chaque nouveau paquet ou app (apps/server, apps/web…)
 COPY packages/rules/package.json packages/rules/
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile --ignore-scripts

@@ -1,7 +1,9 @@
 # Environnement de développement local.
+#   docker compose watch             → base + mode watch : sources synchronisées, rebuild
+#                                      et tests relancés à chaque modification
 #   docker compose up -d db          → base PostgreSQL seule
 #   docker compose run --rm dev      → lance tous les tests dans un conteneur
-#   docker compose run --rm dev sh   → shell avec Node 22 et pnpm
+#   docker compose run --rm dev sh   → shell avec Node 22 et pnpm, sources montées
 name: epiquest
 
 services:
@@ -21,7 +23,10 @@ services:
       timeout: 3s
       retries: 10
 
+  # Conteneur à la demande (tests ponctuels, shell). Profil « tools » : il n'est pas
+  # démarré par `docker compose up` ni `watch`, mais `docker compose run dev` l'active.
   dev:
+    profiles: [tools]
     build:
       context: .
       target: dev
@@ -34,6 +39,53 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  # Mode watch (`docker compose watch`) : lance `pnpm dev` (build incrémental + tests
+  # en continu de tous les paquets). Pas de montage des sources : Compose les copie
+  # dans le conteneur à chaque modification, ce qui déclenche les watchers de façon
+  # fiable sur macOS et Windows.
+  watch:
+    build:
+      context: .
+      target: dev
+    command: ["pnpm", "dev", "--ui=stream"]
+    init: true
+    environment:
+      DATABASE_URL: postgres://epiquest:epiquest@db:5432/epiquest
+      TURBO_TELEMETRY_DISABLED: "1"
+    depends_on:
+      db:
+        condition: service_healthy
+    develop:
+      watch:
+        # Code source des paquets et des apps : copié tel quel, les watchers
+        # (tsc, vitest, puis serveur et web) prennent le relais.
+        - action: sync
+          path: ./packages
+          target: /app/packages
+          ignore: &generated
+            - "**/node_modules/"
+            - "**/dist/"
+            - "**/coverage/"
+            - "**/.turbo/"
+        - action: sync
+          path: ./apps
+          target: /app/apps
+          ignore: *generated
+        # Configuration partagée : relue au redémarrage de `pnpm dev`.
+        - action: sync+restart
+          path: ./turbo.json
+          target: /app/turbo.json
+        - action: sync+restart
+          path: ./tsconfig.base.json
+          target: /app/tsconfig.base.json
+        # Dépendances : l'image est reconstruite pour refaire `pnpm install`.
+        - action: rebuild
+          path: ./pnpm-lock.yaml
+        - action: rebuild
+          path: ./package.json
+        - action: rebuild
+          path: ./pnpm-workspace.yaml
 
 volumes:
   db-data:

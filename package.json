@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "turbo run build",
+    "dev": "turbo run dev test:watch",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "typecheck": "turbo run typecheck",
