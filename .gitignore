@@ -1,0 +1,29 @@
+# Dépendances
+node_modules/
+
+# Builds et caches
+dist/
+build/
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# Mobile (Expo / Android)
+.expo/
+android/
+ios/
+*.apk
+*.aab
+
+# Environnement et secrets
+.env
+.env.*
+!.env.example
+
+# Éditeurs et système
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.log

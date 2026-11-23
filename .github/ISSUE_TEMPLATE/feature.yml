@@ -1,0 +1,23 @@
+name: Fonctionnalité
+description: Proposer une fonctionnalité ou une tâche
+labels: [feat]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Objectif
+      description: Le besoin, du point de vue du MJ ou du joueur.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critères d'acceptation
+      placeholder: "- [ ] …"
+    validations:
+      required: true
+  - type: textarea
+    id: a11y
+    attributes:
+      label: Accessibilité
+      description: Points d'attention clavier, lecteur d'écran, contrastes.

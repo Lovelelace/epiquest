@@ -1,0 +1,48 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cd-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Vérifier avant déploiement
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+  deploy:
+    name: Déployer en production
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      # L'hébergeur sera choisi au jalon M0 (voir docs/adr). Le déploiement se
+      # déclenche via un hook stocké dans les secrets GitHub (DEPLOY_HOOK_URL).
+      - name: Déclencher le déploiement
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "::warning::Secret DEPLOY_HOOK_URL absent : déploiement ignoré (hébergeur pas encore configuré)."
+            exit 0
+          fi
+          curl --fail --silent --show-error -X POST "$DEPLOY_HOOK_URL"
