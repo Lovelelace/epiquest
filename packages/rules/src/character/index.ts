@@ -105,3 +105,5 @@ export type {
   ShortRestInput,
   ShortRestResult,
 } from "./life.js";
+export { extendUsedSlots, hitPointGain, levelUpGains } from "./level-up.js";
+export type { HitPointMethod, LevelUpGains } from "./level-up.js";

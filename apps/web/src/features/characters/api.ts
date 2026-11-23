@@ -5,6 +5,7 @@ import {
   characterSchema,
   creationOptionsSchema,
   creationPreviewSchema,
+  levelUpOptionsSchema,
   srdDetailExtension,
   srdPageSchema,
   srdSummarySchemas,
@@ -17,6 +18,8 @@ import {
   type CharacterDraftUpdate,
   type CreationOptions,
   type CreationPreview,
+  type LevelUpOptions,
+  type LevelUpRequest,
 } from "@epiquest/schemas";
 import { apiRequest } from "@/shared/lib/http";
 
@@ -115,4 +118,16 @@ export async function listOptions(entity: OriginEntity): Promise<SrdOption[]> {
 
 export function getOption(entity: OriginEntity, slug: string): Promise<SrdOptionDetail> {
   return apiRequest(srdSummarySchemas[entity].extend(srdDetailExtension), `/srd/${entity}/${slug}`);
+}
+
+export function getLevelUpOptions(characterId: string): Promise<LevelUpOptions> {
+  return apiRequest(levelUpOptionsSchema, `/characters/${characterId}/level-up`);
+}
+
+/** Passe au niveau suivant : le serveur valide les choix et tire le dé de vie s'il le faut. */
+export function levelUp(characterId: string, request: LevelUpRequest): Promise<Character> {
+  return apiRequest(characterSchema, `/characters/${characterId}/level-up`, {
+    method: "POST",
+    body: request,
+  });
 }

@@ -84,6 +84,19 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
 
   const rollRequests: object[] = [];
   const actions: object[] = [];
+  const levelUps: object[] = [];
+  const levelUpOptions = {
+    nextLevel: 2,
+    hitDie: 6,
+    averageHitPoints: 4,
+    features: [{ slug: "arcane-tradition", name: "Arcane Tradition" }],
+    subclassOptions: [{ slug: "evocation", name: "Evocation" }],
+    abilityScoreImprovement: false,
+    expertiseCount: 0,
+    newCantrips: 0,
+    maxSpells: 5,
+    spellList: options.spellcasting.spellList,
+  };
   const fetchMock = vi.fn((input: string, init?: RequestInit) => {
     const url = new URL(input);
     const [, first, second, third] = url.pathname.split("/");
@@ -109,6 +122,21 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
     }
     if (first === "characters" && third === "rolls") return json([]);
     if (first === "characters" && third === "history") return json([]);
+    if (first === "characters" && third === "level-up" && init?.method === "POST") {
+      const request = JSON.parse(String(init.body)) as { subclass?: string };
+      levelUps.push(request);
+      if (!request.subclass)
+        return json(
+          {
+            code: "LEVEL_UP_INVALID",
+            message: "Les choix du nouveau niveau ne respectent pas les règles.",
+            details: [{ code: "SUBCLASS_REQUIRED", message: "Choisissez une sous-classe." }],
+          },
+          422,
+        );
+      return json({ ...TEST_CHARACTER, level: 2 });
+    }
+    if (first === "characters" && third === "level-up") return json(levelUpOptions);
     if (first === "characters" && third === "actions") {
       const action = JSON.parse(String(init?.body)) as { type: string; amount?: number };
       actions.push(action);
@@ -180,5 +208,5 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
     return json({ code: "NOT_FOUND", message: "Introuvable" }, 404);
   });
   vi.stubGlobal("fetch", fetchMock);
-  return { fetchMock, current: () => draft, rollRequests, actions };
+  return { fetchMock, current: () => draft, rollRequests, actions, levelUps };
 }

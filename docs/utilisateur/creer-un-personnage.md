@@ -19,6 +19,17 @@ L'assistant de création se lance depuis l'accueil, avec le lien « Créer un pe
 
 Le serveur vérifie toutes les règles avant de créer le personnage. S'il reste un problème, la liste « À corriger » indique quoi changer.
 
+## Monter de niveau
+
+Sur la fiche, la section « Monter de niveau » propose le niveau suivant, jusqu'au niveau 5 :
+
+- **Points de vie** : la moyenne du dé de vie, ou un jet tiré par le serveur ; le modificateur de Constitution s'ajoute dans les deux cas.
+- **Sous-classe** : au niveau où la classe la choisit (2 pour le magicien, 3 pour la plupart des classes).
+- **Augmentation de caractéristique** au niveau 4 : +2 à une caractéristique, ou +1 à deux caractéristiques (20 au plus).
+- **Expertise** (barde au niveau 3), **nouveaux sorts mineurs** et **sorts** : la liste des sorts est complète, cochez ceux que vous gardez.
+
+Le serveur vérifie les choix avec les règles du nouveau niveau ; s'il refuse, le message indique quoi corriger. Les PV perdus restent perdus : la montée ajoute seulement la différence de PV maximum.
+
 ## Au clavier
 
 - `Tab` et `Maj + Tab` passent d'un groupe d'options à l'autre ; les flèches changent d'option dans un groupe.
