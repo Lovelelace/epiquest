@@ -41,6 +41,8 @@ export const conditionSchema = z.enum([
 ]);
 
 const feet = z.number().int().positive();
+/** Allonge en pieds ; 0 = la cible doit être dans l'espace de l'attaquant (nuées). */
+const reach = z.number().int().nonnegative();
 
 /** Durée d'un effet. Absente : l'effet est instantané. */
 export const durationSchema = z.object({
@@ -98,13 +100,20 @@ export const outcomeEffectSchema = z.discriminatedUnion("type", [
 
 /**
  * Jet d'attaque. `attackBonus` absent : bonus d'attaque de l'auteur (sort, arme maniée).
- * Un monstre du SRD a un bonus fixe.
+ * Un monstre du SRD a un bonus fixe. `melee_or_ranged_weapon` : arme de lancer (dague,
+ * javeline), utilisable au contact (`reach`) ou à distance (`range`).
  */
 export const attackEffectSchema = z.object({
   type: z.literal("attack"),
-  kind: z.enum(["melee_weapon", "ranged_weapon", "melee_spell", "ranged_spell"]),
+  kind: z.enum([
+    "melee_weapon",
+    "ranged_weapon",
+    "melee_or_ranged_weapon",
+    "melee_spell",
+    "ranged_spell",
+  ]),
   attackBonus: z.number().int().optional(),
-  reach: feet.optional(),
+  reach: reach.optional(),
   range: z.object({ normal: feet, long: feet.optional() }).optional(),
   onHit: z.array(outcomeEffectSchema).min(1),
   onMiss: z.array(outcomeEffectSchema).default([]),
