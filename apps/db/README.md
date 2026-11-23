@@ -11,7 +11,7 @@ src/
 ├── schema/        un fichier par feature (src/schema/<feature>.ts), réexporté par index.ts
 │   └── srd/       entités du SRD 5.1, un fichier par entité
 ├── seed/          données de la campagne de démonstration (à venir)
-├── srd/           import du SRD 5.1, rejouable et versionné (à venir)
+├── srd/           import du SRD 5.1, rejouable et versionné (data/ = fichiers sources figés)
 ├── client.ts      createDatabase(url) : connexion Drizzle + postgres.js
 ├── env.ts         lecture de DATABASE_URL
 └── migrate.ts     applique les migrations (script `migrate`)
@@ -59,6 +59,25 @@ db.select()
   .where(sql`${srdSpells.search} @@ plainto_tsquery('english', ${query})`);
 ```
 
+## Import du SRD
+
+`pnpm --filter @epiquest/db srd:import` importe le SRD dans la base (`DATABASE_URL` requise,
+migrations appliquées). Docker Compose le lance après les migrations (service `migrate`).
+
+- **Source figée** : les fichiers JSON de `src/srd/data/` sont copiés sans modification depuis
+  [5e-bits/5e-database](https://github.com/5e-bits/5e-database), au tag et au commit indiqués dans
+  `src/srd/version.ts`. L'import ne télécharge rien (DATA-16).
+- **Validation** : chaque fichier est validé par un schéma zod (`src/srd/source.ts`) avant tout
+  accès à la base. Un fichier invalide fait échouer l'import avec le chemin de l'erreur.
+- **Idempotent** : tout se passe dans une transaction ; chaque entrée est insérée ou mise à jour
+  selon son `slug`, son UUID ne change pas. Les liens sorts ↔ classes sont recréés. Les entrées
+  disparues de la source ne sont pas supprimées.
+- **Version enregistrée** : la table `srd_imports` garde, par version du SRD, le dépôt, le tag, le
+  commit et la date du dernier import. `getImportedSrdVersion(db)` la renvoie.
+
+Changer de version : recopier les fichiers depuis le nouveau tag dans `src/srd/data/`, mettre à
+jour `src/srd/version.ts`, relancer les tests (`pnpm --filter @epiquest/db test`).
+
 ## Ajouter ou modifier une table
 
 1. Déclarer la table dans `src/schema/<feature>.ts` et la réexporter dans `src/schema/index.ts`.
@@ -70,11 +89,12 @@ migration, on se remet à jour, puis on la régénère (règle DATA-09).
 
 ## Commandes
 
-| Commande                              | Rôle                                                       |
-| ------------------------------------- | ---------------------------------------------------------- |
-| `pnpm --filter @epiquest/db generate` | Génère une migration à partir du schéma                    |
-| `pnpm --filter @epiquest/db migrate`  | Applique les migrations (`DATABASE_URL` requise)           |
-| `pnpm --filter @epiquest/db studio`   | Explorateur de la base (Drizzle Studio)                    |
-| `pnpm --filter @epiquest/db test`     | Tests, dont les migrations sur une base embarquée (PGlite) |
+| Commande                                | Rôle                                                       |
+| --------------------------------------- | ---------------------------------------------------------- |
+| `pnpm --filter @epiquest/db generate`   | Génère une migration à partir du schéma                    |
+| `pnpm --filter @epiquest/db migrate`    | Applique les migrations (`DATABASE_URL` requise)           |
+| `pnpm --filter @epiquest/db srd:import` | Importe le SRD (rejouable)                                 |
+| `pnpm --filter @epiquest/db studio`     | Explorateur de la base (Drizzle Studio)                    |
+| `pnpm --filter @epiquest/db test`       | Tests, dont les migrations sur une base embarquée (PGlite) |
 
 Avec Docker Compose, les migrations s'appliquent automatiquement au démarrage (service `migrate`).
