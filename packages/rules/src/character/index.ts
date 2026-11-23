@@ -81,3 +81,27 @@ export {
 export type { AbilityScoreRoll, RollDie } from "./ability-rolls.js";
 export { D20_SIDES, rollCheck, rollDamage } from "./checks.js";
 export type { RolledDie, RollResult } from "./checks.js";
+export {
+  addItem,
+  applyDamage,
+  changeMoney,
+  COIN_VALUES_IN_COPPER,
+  COINS,
+  equipItem,
+  grantTemporaryHitPoints,
+  heal,
+  LifeRuleError,
+  longRest,
+  removeItem,
+  shortRest,
+  totalInCopper,
+} from "./life.js";
+export type {
+  Coin,
+  Coins,
+  HitPoints,
+  InventoryEntry,
+  RestState,
+  ShortRestInput,
+  ShortRestResult,
+} from "./life.js";

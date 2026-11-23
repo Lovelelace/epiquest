@@ -26,7 +26,7 @@ describe("Fiche de personnage interactive", () => {
     const api = mockApi();
     render(<CharacterSheet characterId={TEST_CHARACTER.id} />);
     fireEvent.click(await screen.findByRole("button", { name: "Arcanes (maîtrise) +5" }));
-    const status = screen.getByRole("status");
+    const status = screen.getByRole("status", { name: "Résultat du jet" });
     await waitFor(() => expect(status.textContent).toBe("Arcanes : 16 (d20 11, modificateur +5)."));
     expect(api.rollRequests).toEqual([{ kind: "skill", key: "arcana", visibility: "public" }]);
   });
@@ -39,7 +39,7 @@ describe("Fiche de personnage interactive", () => {
     );
     fireEvent.click(screen.getByRole("button", { name: "Arcanes (maîtrise) +5" }));
     await waitFor(() =>
-      expect(screen.getByRole("status").textContent).toBe(
+      expect(screen.getByRole("status", { name: "Résultat du jet" }).textContent).toBe(
         "Arcanes : jet caché lancé, seul le MJ voit le résultat.",
       ),
     );

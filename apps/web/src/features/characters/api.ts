@@ -1,5 +1,6 @@
 import {
   characterDraftSchema,
+  characterHistoryEntrySchema,
   characterRollSchema,
   characterSchema,
   creationOptionsSchema,
@@ -8,7 +9,9 @@ import {
   srdPageSchema,
   srdSummarySchemas,
   type Character,
+  type CharacterAction,
   type CharacterDraft,
+  type CharacterHistoryEntry,
   type CharacterRoll,
   type CharacterRollRequest,
   type CharacterDraftUpdate,
@@ -78,6 +81,27 @@ export function rollFromSheet(
 
 export function getRecentRolls(characterId: string): Promise<CharacterRoll[]> {
   return apiRequest(characterRollSchema.array(), `/characters/${characterId}/rolls`);
+}
+
+export function actOnCharacter(characterId: string, action: CharacterAction): Promise<Character> {
+  return apiRequest(characterSchema, `/characters/${characterId}/actions`, {
+    method: "POST",
+    body: action,
+  });
+}
+
+export function getHistory(characterId: string): Promise<CharacterHistoryEntry[]> {
+  return apiRequest(characterHistoryEntrySchema.array(), `/characters/${characterId}/history`);
+}
+
+/** Recherche d'équipement du SRD par nom (anglais). */
+export async function searchItems(query: string): Promise<SrdOption[]> {
+  const params = new URLSearchParams({ q: query, kind: "equipment", pageSize: "10" });
+  const page = await apiRequest(
+    srdPageSchema(srdSummarySchemas.items),
+    `/srd/items?${params.toString()}`,
+  );
+  return page.items;
 }
 
 /** Toutes les options d'une entité du SRD (au plus une page de 100, suffisant pour les origines). */
