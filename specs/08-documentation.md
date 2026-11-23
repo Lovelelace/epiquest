@@ -42,20 +42,24 @@ Modèle d'ADR :
 - Auteurs :
 
 ## Contexte
+
 Le problème à résoudre et les contraintes.
 
 ## Options envisagées
+
 1. Option A — avantages / inconvénients
 2. Option B — avantages / inconvénients
 
 ## Décision
+
 L'option retenue, en une ou deux phrases.
 
 ## Conséquences
+
 Ce que la décision facilite, ce qu'elle complique, ce qu'il faudra surveiller.
 ```
 
 ## Fichiers à la racine
 
 - **DOC-11** — Le `README.md` permet à un nouveau développeur de lancer le produit et les tests en **moins de 15 minutes**. Toute PR qui change l'installation le met à jour.
-- **DOC-12** — `CHANGELOG.md` suit le format *Keep a Changelog* et est mis à jour à chaque changement visible.
+- **DOC-12** — `CHANGELOG.md` suit le format _Keep a Changelog_ et est mis à jour à chaque changement visible.

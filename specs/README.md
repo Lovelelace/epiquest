@@ -12,17 +12,17 @@ Ce dossier contient les règles que **tout développement** doit respecter, quel
 
 ## Sommaire
 
-| Fichier | Contenu |
-| --- | --- |
-| [01-architecture.md](01-architecture.md) | Organisation du code, frontières entre modules, sens des dépendances |
-| [02-donnees-et-contrats.md](02-donnees-et-contrats.md) | Types partagés, validation, base de données, migrations |
-| [03-workflow-git.md](03-workflow-git.md) | Issues, branches, commits, pull requests, revue, définition de « terminé » |
-| [04-code.md](04-code.md) | Conventions TypeScript, nommage, erreurs, logs, dépendances |
-| [05-tests.md](05-tests.md) | Ce qu'on teste, comment, et quand |
-| [06-securite.md](06-securite.md) | Serveur qui fait autorité, permissions, données cachées, secrets |
-| [07-accessibilite.md](07-accessibilite.md) | Règles WCAG 2.2 AA pour le web et le mobile |
-| [08-documentation.md](08-documentation.md) | Documentation utilisateur et technique, ADR |
-| [09-usage-ia.md](09-usage-ia.md) | Règles d'usage des outils d'IA |
+| Fichier                                                | Contenu                                                                    |
+| ------------------------------------------------------ | -------------------------------------------------------------------------- |
+| [01-architecture.md](01-architecture.md)               | Organisation du code, frontières entre modules, sens des dépendances       |
+| [02-donnees-et-contrats.md](02-donnees-et-contrats.md) | Types partagés, validation, base de données, migrations                    |
+| [03-workflow-git.md](03-workflow-git.md)               | Issues, branches, commits, pull requests, revue, définition de « terminé » |
+| [04-code.md](04-code.md)                               | Conventions TypeScript, nommage, erreurs, logs, dépendances                |
+| [05-tests.md](05-tests.md)                             | Ce qu'on teste, comment, et quand                                          |
+| [06-securite.md](06-securite.md)                       | Serveur qui fait autorité, permissions, données cachées, secrets           |
+| [07-accessibilite.md](07-accessibilite.md)             | Règles WCAG 2.2 AA pour le web et le mobile                                |
+| [08-documentation.md](08-documentation.md)             | Documentation utilisateur et technique, ADR                                |
+| [09-usage-ia.md](09-usage-ia.md)                       | Règles d'usage des outils d'IA                                             |
 
 ## Modifier une règle
 

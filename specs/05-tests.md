@@ -10,12 +10,12 @@
 
 ## Quoi tester, et où
 
-| Niveau | Quoi | Où |
-| --- | --- | --- |
-| Unitaire | Fonctions pures : calculs, règles, validations, analyseurs | À côté du code, `*.test.ts` |
-| Intégration | Routes API et événements temps réel avec une vraie base de test | `apps/server/test/` |
-| Composant | Comportement et accessibilité des composants d'interface | À côté du composant |
-| Bout en bout | Parcours critiques complets | `e2e/` |
+| Niveau       | Quoi                                                            | Où                          |
+| ------------ | --------------------------------------------------------------- | --------------------------- |
+| Unitaire     | Fonctions pures : calculs, règles, validations, analyseurs      | À côté du code, `*.test.ts` |
+| Intégration  | Routes API et événements temps réel avec une vraie base de test | `apps/server/test/`         |
+| Composant    | Comportement et accessibilité des composants d'interface        | À côté du composant         |
+| Bout en bout | Parcours critiques complets                                     | `e2e/`                      |
 
 - **TEST-06** — Chaque route ou événement serveur DEVRAIT avoir au moins un test d'intégration pour le cas nominal et un pour chaque refus de permission.
 - **TEST-07** — Tout filtrage d'informations cachées DOIT avoir des tests qui prouvent que la donnée cachée n'est **pas** présente dans ce qui est envoyé (voir `SEC-08`).

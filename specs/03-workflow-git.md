@@ -5,7 +5,7 @@
 - **GIT-01** — Tout travail commence par une issue sur le tableau GitHub Projects, avec un responsable, un label, un statut et un milestone.
 - **GIT-02** — Une issue DOIT tenir en **0,5 à 2 jours** de travail. Au-delà, on la découpe.
 - **GIT-03** — Une issue DOIT contenir des **critères d'acceptation** vérifiables (« c'est terminé quand… »).
-- **GIT-04** — Le statut de l'issue sur le tableau est tenu à jour par son responsable : *À faire → En cours → En revue → Terminé*.
+- **GIT-04** — Le statut de l'issue sur le tableau est tenu à jour par son responsable : _À faire → En cours → En revue → Terminé_.
 
 ## Branches
 
