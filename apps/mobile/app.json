@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "EpiQuest",
+    "slug": "epiquest",
+    "scheme": "epiquest",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "platforms": ["android"],
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

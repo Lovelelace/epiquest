@@ -2,3 +2,9 @@ pnpm-lock.yaml
 dist
 coverage
 .turbo
+.next
+.expo
+next-env.d.ts
+expo-env.d.ts
+# Généré par drizzle-kit
+apps/db/migrations

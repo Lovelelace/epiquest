@@ -8,7 +8,12 @@ coverage/
 .turbo/
 *.tsbuildinfo
 
+# Web (Next.js)
+.next/
+next-env.d.ts
+
 # Mobile (Expo / Android)
+expo-env.d.ts
 .expo/
 android/
 ios/

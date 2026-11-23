@@ -4,14 +4,20 @@
 FROM node:22-bookworm-slim AS base
 ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
+ENV NEXT_TELEMETRY_DISABLED=1 TURBO_TELEMETRY_DISABLED=1
 RUN corepack enable
 WORKDIR /app
 
 # Dépendances : seuls les manifestes sont copiés pour profiter du cache Docker
 FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-# Ajouter ici le package.json de chaque nouveau paquet ou app (apps/server, apps/web…)
+# Un manifeste par paquet ou app : en ajouter une ligne à chaque nouveau dossier
+COPY apps/db/package.json apps/db/
+COPY apps/mobile/package.json apps/mobile/
+COPY apps/server/package.json apps/server/
+COPY apps/web/package.json apps/web/
 COPY packages/rules/package.json packages/rules/
+COPY packages/schemas/package.json packages/schemas/
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile --ignore-scripts
 
