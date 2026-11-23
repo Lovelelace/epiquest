@@ -10,3 +10,7 @@ export const MAX_CONSTANT = 1000;
 
 /** Longueur maximale d'une expression saisie, en caractères. */
 export const MAX_EXPRESSION_LENGTH = 200;
+
+export function isDieSize(value: number): value is DieSize {
+  return (DIE_SIZES as readonly number[]).includes(value);
+}

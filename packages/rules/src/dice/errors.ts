@@ -9,7 +9,16 @@ export interface Span {
  * détails ; le message français de l'erreur sert de texte par défaut et aux logs.
  */
 export type DiceSyntaxErrorCode =
-  "EMPTY_EXPRESSION" | "EXPRESSION_TOO_LONG" | "UNEXPECTED_CHARACTER";
+  | "EMPTY_EXPRESSION"
+  | "EXPRESSION_TOO_LONG"
+  | "UNEXPECTED_CHARACTER"
+  | "UNEXPECTED_TOKEN"
+  | "UNEXPECTED_END"
+  | "MISSING_DIE_SIZE"
+  | "INVALID_DIE_SIZE"
+  | "INVALID_DICE_COUNT"
+  | "TOO_MANY_DICE"
+  | "NUMBER_TOO_LARGE";
 
 export type DiceSyntaxErrorDetails = Readonly<Record<string, string | number>>;
 
