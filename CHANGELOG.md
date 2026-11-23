@@ -8,6 +8,7 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 
 ### Ajouté
 
+- Base de données : tables des entités du SRD 5.1 (espèces, classes, sous-classes, historiques, sorts, objets, monstres, états) avec recherche plein texte.
 - Squelettes des applications : `apps/server` (NestJS, Socket.IO, `GET /health`), `apps/web` (Next.js App Router, Tailwind), `apps/mobile` (Expo Router, Android), `apps/db` (Drizzle, migration initiale, script de migration).
 - Paquet `@epiquest/schemas` : contrats zod partagés.
 - Docker Compose : service `migrate` (migrations automatiques), API et web exposés en mode watch sur les ports 3000 et 3001.

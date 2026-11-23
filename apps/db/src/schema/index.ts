@@ -5,4 +5,4 @@
  * puis on le réexporte ici : `export * from "./<feature>.js";`
  * drizzle-kit lit ce fichier pour générer les migrations.
  */
-export {};
+export * from "./srd/index.js";
