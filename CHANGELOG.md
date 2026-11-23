@@ -8,6 +8,7 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 
 ### Ajouté
 
+- Conversion automatique des attaques de monstres du SRD vers le format des effets pendant l'import (527 attaques sur 534), avec rapport des attaques non converties.
 - Import du SRD 5.1 (`pnpm --filter @epiquest/db srd:import`) : source figée dans le dépôt, validée, rejouable sans doublon, version importée enregistrée en base. Lancé automatiquement par Docker Compose.
 - Base de données : tables des entités du SRD 5.1 (espèces, classes, sous-classes, historiques, sorts, objets, monstres, états) avec recherche plein texte.
 - Format des effets de jeu (attaque, sauvegarde, dégâts, soins, état, modificateur) en schémas zod dans `@epiquest/schemas`, ADR 0003.
