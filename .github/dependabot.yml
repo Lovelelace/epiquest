@@ -1,3 +1,6 @@
+# Mises à jour de dépendances : une PR groupée par écosystème et par semaine.
+# Les mises à jour mineures et correctives sont fusionnées automatiquement
+# quand la CI passe (voir .github/workflows/dependabot-auto-merge.yml).
 version: 2
 updates:
   - package-ecosystem: npm
@@ -5,11 +8,31 @@ updates:
     target-branch: develop
     schedule:
       interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Paris
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
     groups:
-      dev-dependencies:
-        dependency-type: development
+      npm-minor-patch:
+        update-types: [minor, patch]
+      npm-major:
+        update-types: [major]
+
   - package-ecosystem: github-actions
     directory: /
     target-branch: develop
     schedule:
       interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Paris
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci
+      include: scope
+    groups:
+      actions:
+        patterns: ["*"]
