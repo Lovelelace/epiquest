@@ -64,6 +64,20 @@ docker compose up -d db              # démarre la base PostgreSQL de développe
 docker compose run --rm dev sh       # shell avec Node 22 et pnpm, sources montées
 ```
 
+### Développer en mode watch
+
+```bash
+docker compose watch                 # base + build incrémental et tests relancés à chaque modification
+```
+
+Compose copie dans le conteneur chaque fichier modifié dans `packages/` et `apps/`, et le build
+et les tests se relancent automatiquement. Une modification de `turbo.json` ou de
+`tsconfig.base.json` redémarre le conteneur. Une modification des dépendances (`package.json`
+racine, `pnpm-lock.yaml`, `pnpm-workspace.yaml`) reconstruit l'image. `Ctrl+C` arrête le watch.
+Docker Compose 2.22 ou plus récent est requis.
+
+Sans Docker, l'équivalent est `pnpm dev`.
+
 Les identifiants de la base de développement sont ceux de `.env.example`. Ils ne servent qu'en
 local.
 
@@ -77,12 +91,13 @@ pnpm test
 
 Autres commandes utiles :
 
-| Commande         | Rôle                               |
-| ---------------- | ---------------------------------- |
-| `pnpm lint`      | ESLint et vérification Prettier    |
-| `pnpm format`    | Formate tout le code avec Prettier |
-| `pnpm typecheck` | Vérification des types TypeScript  |
-| `pnpm build`     | Build de tous les paquets          |
+| Commande         | Rôle                                  |
+| ---------------- | ------------------------------------- |
+| `pnpm lint`      | ESLint et vérification Prettier       |
+| `pnpm format`    | Formate tout le code avec Prettier    |
+| `pnpm typecheck` | Vérification des types TypeScript     |
+| `pnpm build`     | Build de tous les paquets             |
+| `pnpm dev`       | Build incrémental et tests en continu |
 
 Lancer les tests d'un seul paquet : `pnpm --filter @epiquest/rules test`.
 Lancer un seul fichier de test : `pnpm --filter @epiquest/rules exec vitest run src/abilities.test.ts`.
