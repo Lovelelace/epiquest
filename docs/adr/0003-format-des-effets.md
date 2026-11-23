@@ -29,7 +29,7 @@ Option 1, décrite en zod dans `@epiquest/schemas` (`src/effects.ts`) :
 - `ActionEffects` : ce qui se passe quand on utilise l'élément. Activation (`action`,
   `bonus_action`, `reaction`), portée en pieds ou `self`/`touch`, zone facultative,
   concentration, et une liste ordonnée d'effets.
-- Effets de résolution : `attack` (type d'attaque, bonus fixe ou celui de l'auteur, allonge ou
+- Effets de résolution : `attack` (type d'attaque, dont arme de lancer au contact ou à distance, bonus fixe ou celui de l'auteur, allonge ou
   portée, `onHit`, `onMiss`) et `saving_throw` (caractéristique, DD fixe ou celui de l'auteur,
   `onFail`, `onSuccess`, `halfDamageOnSuccess`).
 - Conséquences : `damage` (dés, type de dégâts, dés par niveau d'emplacement), `healing`,

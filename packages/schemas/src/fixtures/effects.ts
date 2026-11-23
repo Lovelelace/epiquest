@@ -28,6 +28,33 @@ export const validActions: Record<string, ActionEffectsInput> = {
       },
     ],
   },
+  // Arme de lancer : au contact ou à distance.
+  "bandit-dagger": {
+    activation: "action",
+    effects: [
+      {
+        type: "attack",
+        kind: "melee_or_ranged_weapon",
+        attackBonus: 3,
+        reach: 5,
+        range: { normal: 20, long: 60 },
+        onHit: [{ type: "damage", dice: "1d4 + 1", damageType: "piercing" }],
+      },
+    ],
+  },
+  // Nuée : allonge nulle, la cible doit être dans son espace.
+  "swarm-of-rats-bites": {
+    activation: "action",
+    effects: [
+      {
+        type: "attack",
+        kind: "melee_weapon",
+        attackBonus: 2,
+        reach: 0,
+        onHit: [{ type: "damage", dice: "2d6", damageType: "piercing" }],
+      },
+    ],
+  },
   // Sauvegarde, zone, moitié des dégâts en cas de réussite, dés par niveau d'emplacement.
   fireball: {
     activation: "action",
@@ -159,6 +186,17 @@ export const invalidActions: Record<string, unknown> = {
         type: "saving_throw",
         ability: "luck",
         onFail: [{ type: "damage", dice: "1d6", damageType: "fire" }],
+      },
+    ],
+  },
+  "allonge négative": {
+    activation: "action",
+    effects: [
+      {
+        type: "attack",
+        kind: "melee_weapon",
+        reach: -5,
+        onHit: [{ type: "damage", dice: "1d4", damageType: "piercing" }],
       },
     ],
   },
