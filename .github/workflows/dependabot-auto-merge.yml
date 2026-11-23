@@ -1,0 +1,31 @@
+name: Dependabot auto-merge
+
+# Approuve et active l'auto-merge des PR Dependabot mineures ou correctives.
+# La PR n'est fusionnée qu'une fois toutes les vérifications obligatoires vertes.
+# Les mises à jour majeures restent à relire par un membre de l'équipe.
+
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    name: Auto-merge Dependabot
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - id: meta
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Approuver et activer l'auto-merge
+        if: steps.meta.outputs.update-type != 'version-update:semver-major'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review --approve "$PR_URL" --body "Mise à jour mineure ou corrective : approuvée automatiquement, fusion dès que la CI est verte."
+          gh pr merge --auto --squash "$PR_URL"
