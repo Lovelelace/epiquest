@@ -8,6 +8,7 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 
 ### Ajouté
 
+- Moteur de personnage (`@epiquest/rules`) : calcul des statistiques dérivées (caractéristiques, maîtrise, sauvegardes, compétences, CA, PV, emplacements de sorts, vitesse, encombrement).
 - API de consultation du SRD (`GET /srd/<entité>`, `GET /srd/<entité>/<slug>`, `GET /srd/version`) : pagination, recherche plein texte et filtres par entité.
 - Import du SRD 5.1 (`pnpm --filter @epiquest/db srd:import`) : source figée dans le dépôt, validée, rejouable sans doublon, version importée enregistrée en base. Lancé automatiquement par Docker Compose.
 - Base de données : tables des entités du SRD 5.1 (espèces, classes, sous-classes, historiques, sorts, objets, monstres, états) avec recherche plein texte.
