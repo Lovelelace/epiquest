@@ -1,4 +1,11 @@
-export type { BinaryNode, BinaryOperator, DiceExpression, DiceNode, NumberNode } from "./ast.js";
+export type {
+  BinaryNode,
+  BinaryOperator,
+  DiceExpression,
+  DiceNode,
+  NegateNode,
+  NumberNode,
+} from "./ast.js";
 export { DiceSyntaxError } from "./errors.js";
 export type { DiceSyntaxErrorCode, DiceSyntaxErrorDetails, Span } from "./errors.js";
 export {

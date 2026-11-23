@@ -1,20 +1,30 @@
-import type { BinaryOperator, DiceExpression, DiceNode, NumberNode } from "./ast.js";
+import type { BinaryOperator, DiceExpression, DiceNode } from "./ast.js";
 import { DiceSyntaxError } from "./errors.js";
 import { DIE_SIZES, isDieSize, MAX_CONSTANT, MAX_DICE_PER_GROUP } from "./limits.js";
 import { tokenize, type Token } from "./tokenizer.js";
 
 const ALLOWED_DICE = DIE_SIZES.map((sides) => `d${sides}`).join(", ");
 
+const EXPECTED_OPERAND = "un nombre, un dé ou une parenthèse est attendu";
+const EXPECTED_OPERATOR = "un opérateur (+, -, * ou /) est attendu";
+const EXPECTED_OPERAND_NOT_NEGATION = `${EXPECTED_OPERAND} (pour une valeur négative, utilisez des parenthèses : « 2 * (-1) »)`;
+
 /**
  * Analyse une expression de dés et renvoie son arbre syntaxique.
  *
- * Grammaire actuelle :
+ * Grammaire, de la priorité la plus faible à la plus forte :
  *
  * ```text
- * expression = operand { ("+" | "-") operand }
- * operand    = dice | number
+ * expression = term { ("+" | "-") term }
+ * term       = signed { ("*" | "/") signed }
+ * signed     = [ "-" ] primary         le moins unaire n'est permis qu'en tête d'expression
+ *                                      ou juste après « ( » : `-1d4`, `2 * (-1)`
+ * primary    = dice | number | "(" expression ")"
  * dice       = [ number ] "d" number
  * ```
+ *
+ * Les opérations d'une même priorité se lisent de gauche à droite : `10 - 2 - 3` vaut
+ * `(10 - 2) - 3`.
  *
  * @throws DiceSyntaxError si l'expression est invalide, avec la position de l'erreur.
  */
@@ -39,33 +49,88 @@ class Parser {
   parse(): DiceExpression {
     const expression = this.parseExpression();
     const next = this.peek();
+    if (next.kind === ")") {
+      throw new DiceSyntaxError(
+        "UNMATCHED_CLOSING_PARENTHESIS",
+        `Parenthèse fermante en trop en position ${next.span.start + 1}.`,
+        next.span,
+        { position: next.span.start + 1 },
+      );
+    }
     if (next.kind !== "end") {
-      throw this.unexpected(next, "un opérateur (+ ou -) est attendu");
+      throw this.unexpected(next, EXPECTED_OPERATOR);
     }
     return expression;
   }
 
+  /** expression = term { ("+" | "-") term } */
   private parseExpression(): DiceExpression {
-    let left: DiceExpression = this.parseOperand();
+    let left = this.parseTerm(true);
     let next = this.peek();
     while (next.kind === "+" || next.kind === "-") {
       const operator: BinaryOperator = next.kind;
       this.advance();
-      const right = this.parseOperand();
-      left = {
-        type: "binary",
-        operator,
-        left,
-        right,
-        span: { start: left.span.start, end: right.span.end },
-      };
+      const right = this.parseTerm(false);
+      left = this.binary(operator, left, right);
       next = this.peek();
     }
     return left;
   }
 
-  private parseOperand(): DiceNode | NumberNode {
+  /** term = signed { ("*" | "/") signed } */
+  private parseTerm(negationAllowed: boolean): DiceExpression {
+    let left = this.parseSigned(negationAllowed);
+    let next = this.peek();
+    while (next.kind === "*" || next.kind === "/") {
+      const operator: BinaryOperator = next.kind;
+      this.advance();
+      const right = this.parseSigned(false);
+      left = this.binary(operator, left, right);
+      next = this.peek();
+    }
+    return left;
+  }
+
+  /** signed = [ "-" ] primary */
+  private parseSigned(negationAllowed: boolean): DiceExpression {
     const token = this.peek();
+    if (token.kind !== "-") {
+      return this.parsePrimary();
+    }
+    if (!negationAllowed) {
+      throw this.unexpected(token, EXPECTED_OPERAND_NOT_NEGATION);
+    }
+    this.advance();
+    const afterSign = this.peek();
+    if (afterSign.kind === "-") {
+      throw this.unexpected(afterSign, EXPECTED_OPERAND_NOT_NEGATION);
+    }
+    const operand = this.parsePrimary();
+    return { type: "negate", operand, span: { start: token.span.start, end: operand.span.end } };
+  }
+
+  /** primary = dice | number | "(" expression ")" */
+  private parsePrimary(): DiceExpression {
+    const token = this.peek();
+
+    if (token.kind === "(") {
+      this.advance();
+      const inner = this.parseExpression();
+      const closing = this.peek();
+      if (closing.kind !== ")") {
+        if (closing.kind !== "end") {
+          throw this.unexpected(closing, EXPECTED_OPERATOR);
+        }
+        throw new DiceSyntaxError(
+          "MISSING_CLOSING_PARENTHESIS",
+          `La parenthèse ouverte en position ${token.span.start + 1} n'est pas fermée.`,
+          token.span,
+          { position: token.span.start + 1 },
+        );
+      }
+      this.advance();
+      return { ...inner, span: { start: token.span.start, end: closing.span.end } };
+    }
 
     if (token.kind === "d") {
       this.advance();
@@ -95,13 +160,27 @@ class Parser {
       const after = previous ? ` après « ${this.text(previous)} »` : "";
       throw new DiceSyntaxError(
         "UNEXPECTED_END",
-        `L'expression est incomplète : un nombre ou un dé est attendu${after}.`,
+        `L'expression est incomplète : ${EXPECTED_OPERAND}${after}.`,
         token.span,
         previous ? { after: this.text(previous) } : {},
       );
     }
 
-    throw this.unexpected(token, "un nombre ou un dé est attendu");
+    throw this.unexpected(token, EXPECTED_OPERAND);
+  }
+
+  private binary(
+    operator: BinaryOperator,
+    left: DiceExpression,
+    right: DiceExpression,
+  ): DiceExpression {
+    return {
+      type: "binary",
+      operator,
+      left,
+      right,
+      span: { start: left.span.start, end: right.span.end },
+    };
   }
 
   /** Lit le nombre de faces après le « d » et vérifie le groupe de dés. */

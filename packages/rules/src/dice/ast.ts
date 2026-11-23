@@ -16,9 +16,9 @@ export interface NumberNode {
   span: Span;
 }
 
-export type BinaryOperator = "+" | "-";
+export type BinaryOperator = "+" | "-" | "*" | "/";
 
-/** Opération entre deux sous-expressions : `1d6 + 3`. */
+/** Opération entre deux sous-expressions : `1d6 + 3`, `2 * 1d4`. */
 export interface BinaryNode {
   type: "binary";
   operator: BinaryOperator;
@@ -27,5 +27,15 @@ export interface BinaryNode {
   span: Span;
 }
 
-/** Arbre syntaxique d'une expression de dés. */
-export type DiceExpression = DiceNode | NumberNode | BinaryNode;
+/** Opposé d'une sous-expression : `-1d4`, `-(1d6 + 2)`. */
+export interface NegateNode {
+  type: "negate";
+  operand: DiceExpression;
+  span: Span;
+}
+
+/**
+ * Arbre syntaxique d'une expression de dés. La position (`span`) d'une sous-expression entre
+ * parenthèses inclut ses parenthèses.
+ */
+export type DiceExpression = DiceNode | NumberNode | BinaryNode | NegateNode;

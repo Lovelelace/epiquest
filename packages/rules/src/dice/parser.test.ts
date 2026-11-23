@@ -13,6 +13,8 @@ function shape(node: DiceExpression): unknown {
       return node.value;
     case "binary":
       return [node.operator, shape(node.left), shape(node.right)];
+    case "negate":
+      return ["neg", shape(node.operand)];
   }
 }
 
@@ -144,7 +146,7 @@ describe("parseDiceExpression", () => {
       expect(error.span).toEqual({ start: 4, end: 4 });
       expect(error.details).toEqual({ after: "+" });
       expect(error.message).toBe(
-        "L'expression est incomplète : un nombre ou un dé est attendu après « + ».",
+        "L'expression est incomplète : un nombre, un dé ou une parenthèse est attendu après « + ».",
       );
     });
 
@@ -153,7 +155,7 @@ describe("parseDiceExpression", () => {
       expect(error.code).toBe("UNEXPECTED_TOKEN");
       expect(error.span).toEqual({ start: 4, end: 5 });
       expect(error.message).toBe(
-        "« 3 » inattendu en position 5 : un opérateur (+ ou -) est attendu.",
+        "« 3 » inattendu en position 5 : un opérateur (+, -, * ou /) est attendu.",
       );
     });
 
@@ -168,12 +170,113 @@ describe("parseDiceExpression", () => {
     it("refuse deux opérateurs qui se suivent", () => {
       const error = errorOf("1d6+*2");
       expect(error.code).toBe("UNEXPECTED_TOKEN");
-      expect(error.message).toBe("« * » inattendu en position 5 : un nombre ou un dé est attendu.");
+      expect(error.message).toBe(
+        "« * » inattendu en position 5 : un nombre, un dé ou une parenthèse est attendu.",
+      );
     });
 
     it("transmet les erreurs du tokenizer", () => {
       expect(errorOf("1d6#").code).toBe("UNEXPECTED_CHARACTER");
       expect(errorOf("").code).toBe("EMPTY_EXPRESSION");
+    });
+  });
+  describe("multiplication et division", () => {
+    it.each([
+      ["2*1d6", ["*", 2, "1d6"]],
+      ["1d6/2", ["/", "1d6", 2]],
+      ["4d6 * 100", ["*", "4d6", 100]],
+    ])("lit « %s »", (input, expected) => {
+      expect(parse(input)).toEqual(expected);
+    });
+
+    it("donne la priorité à * et / sur + et -", () => {
+      expect(parse("1+2*3")).toEqual(["+", 1, ["*", 2, 3]]);
+      expect(parse("2*3+1")).toEqual(["+", ["*", 2, 3], 1]);
+      expect(parse("1d20+1d6/2-1")).toEqual(["-", ["+", "1d20", ["/", "1d6", 2]], 1]);
+    });
+
+    it("associe * et / de gauche à droite", () => {
+      expect(parse("8/2/2")).toEqual(["/", ["/", 8, 2], 2]);
+      expect(parse("8/2*2")).toEqual(["*", ["/", 8, 2], 2]);
+    });
+  });
+
+  describe("parenthèses", () => {
+    it("changent l'ordre des opérations", () => {
+      expect(parse("(1+2)*3")).toEqual(["*", ["+", 1, 2], 3]);
+      expect(parse("(1d6+2)*2")).toEqual(["*", ["+", "1d6", 2], 2]);
+    });
+
+    it("peuvent être imbriquées", () => {
+      expect(parse("2*(1d6+(3-1))")).toEqual(["*", 2, ["+", "1d6", ["-", 3, 1]]]);
+      expect(parse("((1d4))")).toBe("1d4");
+    });
+
+    it("sont incluses dans la position de la sous-expression", () => {
+      expect(parseDiceExpression("((1d4))").span).toEqual({ start: 0, end: 7 });
+      expect(parseDiceExpression("(1d6+2)*3").span).toEqual({ start: 0, end: 9 });
+    });
+
+    it("signalent une parenthèse non fermée, à la position de son ouverture", () => {
+      const error = errorOf("2*(1d6+2");
+      expect(error.code).toBe("MISSING_CLOSING_PARENTHESIS");
+      expect(error.span).toEqual({ start: 2, end: 3 });
+      expect(error.message).toBe("La parenthèse ouverte en position 3 n'est pas fermée.");
+    });
+
+    it("désignent la parenthèse extérieure quand c'est elle qui manque", () => {
+      expect(errorOf("((1d6)").span).toEqual({ start: 0, end: 1 });
+    });
+
+    it("signalent une parenthèse fermante en trop", () => {
+      const error = errorOf("1d6)");
+      expect(error.code).toBe("UNMATCHED_CLOSING_PARENTHESIS");
+      expect(error.span).toEqual({ start: 3, end: 4 });
+      expect(error.message).toBe("Parenthèse fermante en trop en position 4.");
+    });
+
+    it("refusent des parenthèses vides", () => {
+      expect(errorOf("()").code).toBe("UNEXPECTED_TOKEN");
+    });
+
+    it("refusent une valeur collée à une parenthèse", () => {
+      expect(errorOf("2(1d6)").code).toBe("UNEXPECTED_TOKEN");
+      expect(errorOf("(1d6)2").code).toBe("UNEXPECTED_TOKEN");
+    });
+  });
+
+  describe("moins unaire", () => {
+    it.each([
+      ["-1d4", ["neg", "1d4"]],
+      ["-3", ["neg", 3]],
+      ["-(1d6+2)", ["neg", ["+", "1d6", 2]]],
+      ["1d6*(-1)", ["*", "1d6", ["neg", 1]]],
+      ["-2*3", ["*", ["neg", 2], 3]],
+    ])("lit « %s »", (input, expected) => {
+      expect(parse(input)).toEqual(expected);
+    });
+
+    it("porte la position du signe et de sa valeur", () => {
+      expect(parseDiceExpression(" -1d4").span).toEqual({ start: 1, end: 5 });
+    });
+
+    it.each(["1d6--2", "2*-1", "--3", "1d6+-2"])(
+      "est refusé après un opérateur, dans « %s »",
+      (input) => {
+        const error = errorOf(input);
+        expect(error.code).toBe("UNEXPECTED_TOKEN");
+        expect(error.message).toContain("utilisez des parenthèses");
+      },
+    );
+
+    it("n'existe pas en version « plus »", () => {
+      expect(errorOf("+3").code).toBe("UNEXPECTED_TOKEN");
+    });
+  });
+
+  describe("fin d'expression", () => {
+    it.each(["1d6*", "2/", "(", "-"])("signale une expression incomplète « %s »", (input) => {
+      expect(errorOf(input).code).toBe("UNEXPECTED_END");
     });
   });
 });
