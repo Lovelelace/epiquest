@@ -22,7 +22,6 @@ Ce dossier contient les règles que **tout développement** doit respecter, quel
 | [06-securite.md](06-securite.md)                       | Serveur qui fait autorité, permissions, données cachées, secrets           |
 | [07-accessibilite.md](07-accessibilite.md)             | Règles WCAG 2.2 AA pour le web et le mobile                                |
 | [08-documentation.md](08-documentation.md)             | Documentation utilisateur et technique, ADR                                |
-| [09-usage-ia.md](09-usage-ia.md)                       | Règles d'usage des outils d'IA                                             |
 
 ## Modifier une règle
 
