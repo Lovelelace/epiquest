@@ -8,7 +8,7 @@ import type {
   RollVisibility,
 } from "@epiquest/schemas";
 import { useEffect, useState } from "react";
-import { getCharacter, getRecentRolls, rollFromSheet } from "../api";
+import { getCharacter, getRecentRolls, rollFromSheet, sheetPdfUrl } from "../api";
 import { describeRoll, signed, VISIBILITY_LABELS } from "../roll-text";
 import { LevelUpPanel } from "./LevelUpPanel";
 import { LifePanel } from "./LifePanel";
@@ -74,6 +74,13 @@ export function CharacterSheet({ characterId }: { characterId: string }) {
           {character.species.name} · {character.class.name} {character.level}
           {character.subclass ? ` (${character.subclass.name})` : ""} · {character.background.name}
         </p>
+        <a
+          href={sheetPdfUrl(character.id)}
+          download
+          className="mt-2 inline-block font-semibold text-indigo-700 underline hover:text-indigo-900 focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          Exporter la fiche en PDF
+        </a>
       </header>
 
       <fieldset>

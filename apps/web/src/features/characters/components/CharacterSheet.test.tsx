@@ -22,6 +22,15 @@ describe("Fiche de personnage interactive", () => {
     expect(screen.getByRole("button", { name: "Attaque : Quarterstaff +1" })).toBeDefined();
   });
 
+  it("propose la fiche en PDF générée par le serveur", async () => {
+    mockApi();
+    render(<CharacterSheet characterId={TEST_CHARACTER.id} />);
+    const link = await screen.findByRole("link", { name: "Exporter la fiche en PDF" });
+    expect(link.getAttribute("href")).toBe(
+      `http://localhost:3000/characters/${TEST_CHARACTER.id}/sheet.pdf`,
+    );
+  });
+
   it("envoie seulement l'intention du jet et annonce le résultat du serveur", async () => {
     const api = mockApi();
     render(<CharacterSheet characterId={TEST_CHARACTER.id} />);

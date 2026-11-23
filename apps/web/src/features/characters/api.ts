@@ -21,6 +21,7 @@ import {
   type LevelUpOptions,
   type LevelUpRequest,
 } from "@epiquest/schemas";
+import { API_URL } from "@/shared/lib/api";
 import { apiRequest } from "@/shared/lib/http";
 
 export type OriginEntity = "species" | "classes" | "backgrounds";
@@ -130,4 +131,9 @@ export function levelUp(characterId: string, request: LevelUpRequest): Promise<C
     method: "POST",
     body: request,
   });
+}
+
+/** Adresse de la fiche en PDF balisé, générée par le serveur. */
+export function sheetPdfUrl(characterId: string): string {
+  return `${API_URL}/characters/${characterId}/sheet.pdf`;
 }
