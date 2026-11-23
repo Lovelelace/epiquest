@@ -55,3 +55,19 @@ export type {
   ValidationError,
   ValidationErrorCode,
 } from "./validation.js";
+export {
+  cantripsKnown,
+  CLASS_PROGRESSIONS,
+  classProgression,
+  expertiseCount,
+  MAX_SUPPORTED_LEVEL,
+  maxSpells,
+  SPECIES_TRAIT_HIT_POINTS_PER_LEVEL,
+  SPECIES_TRAIT_SKILLS,
+} from "./class-progression.js";
+export type {
+  ClassFeature,
+  ClassProgression,
+  ClassSpellcasting,
+  SpellSelection,
+} from "./class-progression.js";
