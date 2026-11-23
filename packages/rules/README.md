@@ -9,6 +9,8 @@ Tout passe par `src/index.ts`.
 - **Caractéristiques** : `abilityModifier`, `proficiencyBonus`.
 - **Personnage** (`src/character/`) : `deriveStatistics(build)` calcule toutes les statistiques dérivées d'un personnage dont les choix sont déjà résolus avec les données SRD (`CharacterBuild`). Chaque statistique a aussi sa propre fonction : `finalAbilityScores`, `abilityModifiers`, `savingThrows`, `skillModifiers`, `armorClass`, `hitPointMaximum`, `averageHitDieGain`, `spellSlots`, `spellcastingStatistics`, `carryingStatus`, `speed`.
 
+- **Validation** : `validateCharacterChoices(choices, rules)` renvoie la liste des erreurs (`code` stable, `message` en français, `path` du champ) ; vide si les choix sont valides. `CreationRules` décrit ce que la classe, l'espèce et l'historique autorisent. Le serveur l'applique avant d'enregistrer (il fait autorité), l'assistant web l'utilise pour guider le joueur.
+
 Le serveur traduit les données SRD de la base en `ClassData`, `SpeciesData` et `ArmorData` avant d'appeler le moteur. Le moteur ne connaît pas la base.
 
 ## Règles appliquées

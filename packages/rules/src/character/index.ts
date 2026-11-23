@@ -36,3 +36,22 @@ export type {
   SpellcastingProgression,
   UnarmoredDefense,
 } from "./types.js";
+export {
+  ABILITY_SCORE_IMPROVEMENT_POINTS,
+  MAX_ABILITY_SCORE,
+  MAX_LEVEL,
+  MIN_LEVEL,
+  POINT_BUY_BUDGET,
+  POINT_BUY_COSTS,
+  pointBuyCost,
+  STANDARD_ARRAY,
+  validateCharacterChoices,
+} from "./validation.js";
+export type {
+  AbilityMethod,
+  CharacterChoices,
+  CreationRules,
+  SpellOption,
+  ValidationError,
+  ValidationErrorCode,
+} from "./validation.js";
