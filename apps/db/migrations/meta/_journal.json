@@ -36,6 +36,13 @@
       "when": 1795458302362,
       "tag": "0004_characters",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795458731464,
+      "tag": "0005_character_rolls",
+      "breakpoints": true
     }
   ]
 }

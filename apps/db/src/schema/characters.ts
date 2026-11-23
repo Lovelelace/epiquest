@@ -52,3 +52,24 @@ export const characterHistory = pgTable(
 
 export type CharacterRow = typeof characters.$inferSelect;
 export type CharacterHistoryRow = typeof characterHistory.$inferSelect;
+
+/** Jets lancés depuis la fiche, avec leur visibilité (public, privé, caché). */
+export const characterRolls = pgTable(
+  "character_rolls",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    characterId: uuid("character_id")
+      .notNull()
+      .references(() => characters.id, { onDelete: "cascade" }),
+    label: text("label").notNull(),
+    expression: text("expression").notNull(),
+    dice: jsonb("dice").notNull(),
+    modifier: integer("modifier").notNull(),
+    total: integer("total").notNull(),
+    visibility: text("visibility").notNull(),
+    rolledAt: timestamp("rolled_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("character_rolls_character_idx").on(table.characterId, table.rolledAt)],
+);
+
+export type CharacterRollRow = typeof characterRolls.$inferSelect;
