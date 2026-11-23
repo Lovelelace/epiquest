@@ -8,6 +8,7 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 
 ### Ajouté
 
+- Moteur de personnage (`@epiquest/rules`) : calcul des statistiques dérivées (caractéristiques, maîtrise, sauvegardes, compétences, CA, PV, emplacements de sorts, vitesse, encombrement).
 - Squelettes des applications : `apps/server` (NestJS, Socket.IO, `GET /health`), `apps/web` (Next.js App Router, Tailwind), `apps/mobile` (Expo Router, Android), `apps/db` (Drizzle, migration initiale, script de migration).
 - Paquet `@epiquest/schemas` : contrats zod partagés.
 - Docker Compose : service `migrate` (migrations automatiques), API et web exposés en mode watch sur les ports 3000 et 3001.
