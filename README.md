@@ -40,7 +40,7 @@ mobile arrivent aux jalons suivants (voir le tableau GitHub Projects).
 - [pnpm](https://pnpm.io/) 10, activé par Corepack : `corepack enable`
 - Git
 
-Docker sera nécessaire à partir du jalon M1 (base PostgreSQL de développement).
+Ou, à la place de Node et pnpm : [Docker](https://docs.docker.com/get-docker/) avec Docker Compose v2.
 
 ## Installation
 
@@ -51,6 +51,21 @@ corepack enable
 pnpm install
 cp .env.example .env
 ```
+
+### Avec Docker
+
+Sans rien installer d'autre que Docker :
+
+```bash
+git clone https://github.com/lovelelace/epiquest.git
+cd epiquest
+docker compose run --rm dev          # installe les dépendances et lance tous les tests
+docker compose up -d db              # démarre la base PostgreSQL de développement (port 5432)
+docker compose run --rm dev sh       # shell avec Node 22 et pnpm, sources montées
+```
+
+Les identifiants de la base de développement sont ceux de `.env.example`. Ils ne servent qu'en
+local.
 
 ## Lancer les tests
 

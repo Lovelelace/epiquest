@@ -26,10 +26,10 @@ feat/42-analyseur-des ──PR──▶ develop ──PR de release──▶ mai
 
 ## Pipelines
 
-| Workflow | Déclencheur                                     | Étapes                                                                                                                 |
-| -------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `ci.yml` | PR vers `develop` ou `main`, push sur `develop` | Installation verrouillée, lint, types, tests, build ; vérification des messages de commit ; scan de secrets (gitleaks) |
-| `cd.yml` | Push sur `main`, ou lancement manuel            | Mêmes vérifications, puis déploiement via le secret `DEPLOY_HOOK_URL` (environnement GitHub `production`)              |
+| Workflow | Déclencheur                                     | Étapes                                                                                                                                                           |
+| -------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ci.yml` | PR vers `develop` ou `main`, push sur `develop` | Installation verrouillée, lint, types, tests, build ; vérification des messages de commit ; scan de secrets (gitleaks) ; build de l'image Docker (cible `build`) |
+| `cd.yml` | Push sur `main`, ou lancement manuel            | Mêmes vérifications, puis déploiement via le secret `DEPLOY_HOOK_URL` (environnement GitHub `production`)                                                        |
 
 Les secrets du pipeline sont stockés dans **Settings → Secrets and variables → Actions**, jamais
 dans le code. Tant que l'hébergeur n'est pas choisi, l'étape de déploiement affiche un
@@ -41,5 +41,5 @@ automatisé (axe) dans la CI, publication de la documentation sur GitHub Pages.
 ## Vérifications obligatoires
 
 Dans **Settings → Branches**, les règles de `main` et `develop` exigent les vérifications
-`Lint, types, tests, build`, `Conventional Commits` et `Scan de secrets`. Une PR dont le
+`Lint, types, tests, build`, `Image Docker`, `Conventional Commits` et `Scan de secrets`. Une PR dont le
 pipeline échoue ne peut pas être mergée.
