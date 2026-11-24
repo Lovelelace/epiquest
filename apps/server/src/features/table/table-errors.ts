@@ -10,6 +10,7 @@ const MESSAGES: Record<TableErrorCode, string> = {
   TOKEN_NOT_FOUND: "Ce jeton n'existe pas sur la table.",
   OUT_OF_MAP: "Cette case est en dehors de la carte.",
   NO_HIT_POINTS: "Ce jeton n'a pas de points de vie.",
+  HIT_POINTS_ABOVE_MAXIMUM: "Les points de vie ne peuvent pas dépasser le maximum du jeton.",
   INVALID_DICE_NOTATION: "Cette notation de dés n'est pas reconnue.",
 };
 
