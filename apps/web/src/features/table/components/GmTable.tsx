@@ -1,6 +1,7 @@
-import type { TableState } from "@epiquest/schemas";
+import { TABLE_EVENTS, type TableState } from "@epiquest/schemas";
 import type { ConnectionStatus } from "../use-table-connection";
 import { ConnectionStatusBadge } from "./ConnectionStatusBadge";
+import { GmControls, type SendAction } from "./GmControls";
 import { GmTokenTable } from "./GmTokenTable";
 import { RollLog } from "./RollLog";
 import { TableMap } from "./TableMap";
@@ -11,11 +12,13 @@ export function GmTable({
   status,
   refusal,
   playersViewHref,
+  send,
 }: {
   state: TableState | null;
   status: ConnectionStatus;
   refusal: string | null;
   playersViewHref: string;
+  send: SendAction;
 }) {
   return (
     <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
@@ -46,7 +49,8 @@ export function GmTable({
             </h2>
             <p className="text-sm text-slate-700">
               Les cases hachurées sont dans le brouillard pour les joueurs ; les jetons en
-              pointillés leur sont cachés.
+              pointillés leur sont cachés. Un clic sur une case la révèle ou la recouvre ; au
+              clavier, utilisez le formulaire « Brouillard » des commandes.
             </p>
             <TableMap
               map={state.map}
@@ -56,9 +60,17 @@ export function GmTable({
                 isHiddenFromPlayers: !token.isVisibleToPlayers,
               }))}
               fog="translucent"
+              onCellActivate={(cell, isRevealed) =>
+                void send(TABLE_EVENTS.setFog, {
+                  campaignId: state.campaignId,
+                  cells: [cell],
+                  isRevealed: !isRevealed,
+                })
+              }
             />
             <GmTokenTable tokens={state.tokens} />
           </section>
+          <GmControls state={state} send={send} />
           <section aria-labelledby="gm-rolls-title" className="space-y-3">
             <h2 id="gm-rolls-title" className="text-xl font-semibold">
               Jets

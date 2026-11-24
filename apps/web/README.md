@@ -31,6 +31,9 @@ Variables d'environnement : `NEXT_PUBLIC_API_URL` (voir `.env.example`).
 
 - `/campagnes/<id>/mj` : vue MJ (état complet). Le lien « Ouvrir la vue joueurs » ouvre
   `/campagnes/<id>/joueurs` dans une seconde fenêtre, à placer sur un écran partagé.
+- Commandes du MJ, toutes au clavier : sélection d'un jeton, déplacement (boutons, ou flèches
+  quand un bouton de déplacement a le focus), visibilité, PV, brouillard par zone rectangulaire
+  (ou clic sur une case), jets publics ou secrets. Le serveur valide et diffuse chaque action.
 - `/campagnes/<id>/joueurs` : vue joueurs en lecture seule, mise à jour en direct par
   Socket.IO. Elle n'affiche que ce que le serveur envoie, déjà filtré.
 

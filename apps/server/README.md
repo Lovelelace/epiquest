@@ -38,10 +38,18 @@ salle de sa campagne et de son public avec `table:join` : `campaign:<id>:gm` ou
 la vue projetée par `projectForPlayers` (`table:player-view`), seule fonction qui décide de ce que
 voient les joueurs (SEC-09). Les contrats sont dans `@epiquest/schemas` (`src/table.ts`).
 
+Les actions du MJ (`table:move-token`, `table:set-fog`, `table:set-token-visibility`,
+`table:set-hit-points`, `table:roll`) sont validées, refusées à toute connexion qui n'est pas
+dans la salle du MJ, appliquées par des fonctions pures (`table-actions.ts`), puis diffusées :
+état complet au MJ, vue projetée aux joueurs, seulement si ce qu'ils voient a changé (un jet
+secret ou un jeton caché déplacé ne leur envoie rien). Les jets sont tirés par le serveur.
+
 Provisoire, en attendant les features comptes et campagnes, puis cartes et brouillard :
 
 - l'identité n'est pas vérifiée : l'annuaire de démonstration (`DemoCampaignMembership`) connaît
   une campagne `5e0c4a3b-2d1f-4e6a-9b8c-7d6e5f4a3b2c`, son MJ `demo-gm` et deux joueurs
   `demo-player-1` et `demo-player-2` ;
 - l'état de la table est gardé en mémoire (`InMemoryTableStateStore`) et repart de la carte de
-  démonstration à chaque redémarrage.
+  démonstration à chaque redémarrage ;
+- les jets passent par l'interface `DiceRoller`, implémentée par `SimpleDiceRoller` (`NdM±K`,
+  `crypto.randomInt`) en attendant l'évaluation du moteur de dés (#26).

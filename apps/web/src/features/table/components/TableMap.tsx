@@ -28,12 +28,15 @@ export function TableMap({
   tokens,
   fog,
   selectedTokenId = null,
+  onCellActivate,
 }: {
   map: TableMapData;
   revealedCells: readonly GridPosition[];
   tokens: readonly MapToken[];
   fog: "opaque" | "translucent";
   selectedTokenId?: string | null;
+  /** Raccourci à la souris (vue MJ). Toujours doublé d'une commande au clavier (A11Y-05). */
+  onCellActivate?: (cell: GridPosition, isRevealed: boolean) => void;
 }) {
   const revealed = new Set(revealedCells.map(cellKey));
   const tokensByCell = new Map<string, MapToken[]>();
@@ -61,7 +64,10 @@ export function TableMap({
               key={key}
               data-testid={`cell-${key}`}
               data-revealed={isRevealed}
-              className={`relative flex aspect-square items-center justify-center border border-slate-300 ${fogClass(isRevealed, fog)}`}
+              onClick={
+                onCellActivate === undefined ? undefined : () => onCellActivate(cell, isRevealed)
+              }
+              className={`relative flex aspect-square items-center justify-center border border-slate-300 ${fogClass(isRevealed, fog)} ${onCellActivate === undefined ? "" : "cursor-pointer"}`}
             >
               {(tokensByCell.get(key) ?? []).map((token) => (
                 <span

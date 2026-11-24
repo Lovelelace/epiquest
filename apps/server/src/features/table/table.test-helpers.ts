@@ -83,3 +83,20 @@ export const nextGmState = (socket: Socket): Promise<TableState> =>
 
 export const nextPlayerView = (socket: Socket): Promise<PlayerTableView> =>
   nextMessage<PlayerTableView>(socket, TABLE_EVENTS.playerView);
+
+/** Attend la vue joueurs d'une révision donnée, en ignorant les précédentes. */
+export function playerViewAtRevision(socket: Socket, revision: number): Promise<PlayerTableView> {
+  return new Promise<PlayerTableView>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      socket.off(TABLE_EVENTS.playerView, onView);
+      reject(new Error(`Aucune vue joueurs de révision ${revision} reçue`));
+    }, RECEIVE_TIMEOUT_MS);
+    function onView(view: PlayerTableView): void {
+      if (view.revision !== revision) return;
+      clearTimeout(timer);
+      socket.off(TABLE_EVENTS.playerView, onView);
+      resolve(view);
+    }
+    socket.on(TABLE_EVENTS.playerView, onView);
+  });
+}
