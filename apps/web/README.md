@@ -26,3 +26,14 @@ src/
 | `pnpm --filter @epiquest/web start` | Lance le build de production                       |
 
 Variables d'environnement : `NEXT_PUBLIC_API_URL` (voir `.env.example`).
+
+## Table de jeu (vue MJ et vue joueurs)
+
+- `/campagnes/<id>/mj` : vue MJ (état complet). Le lien « Ouvrir la vue joueurs » ouvre
+  `/campagnes/<id>/joueurs` dans une seconde fenêtre, à placer sur un écran partagé.
+- `/campagnes/<id>/joueurs` : vue joueurs en lecture seule, mise à jour en direct par
+  Socket.IO. Elle n'affiche que ce que le serveur envoie, déjà filtré.
+
+Provisoire, en attendant les comptes : l'utilisateur est choisi dans l'URL avec
+`?utilisateur=` (`demo-gm` par défaut, ou `demo-player-1`, `demo-player-2`). La page d'accueil
+mène à la campagne de démonstration du serveur.
