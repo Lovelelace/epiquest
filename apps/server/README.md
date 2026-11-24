@@ -21,12 +21,13 @@ src/
 
 ## Commandes
 
-| Commande                               | Rôle                                            |
-| -------------------------------------- | ----------------------------------------------- |
-| `pnpm --filter @epiquest/server dev`   | Serveur en mode watch sur http://localhost:3000 |
-| `pnpm --filter @epiquest/server test`  | Tests (Vitest + SWC pour les décorateurs)       |
-| `pnpm --filter @epiquest/server build` | Compile vers `dist/`                            |
-| `pnpm --filter @epiquest/server start` | Lance la version compilée                       |
+| Commande                                      | Rôle                                                                        |
+| --------------------------------------------- | --------------------------------------------------------------------------- |
+| `pnpm --filter @epiquest/server dev`          | Serveur en mode watch sur http://localhost:3000                             |
+| `pnpm --filter @epiquest/server test`         | Tests (Vitest + SWC pour les décorateurs)                                   |
+| `pnpm --filter @epiquest/server build`        | Compile vers `dist/`                                                        |
+| `pnpm --filter @epiquest/server start`        | Lance la version compilée                                                   |
+| `pnpm --filter @epiquest/server measure:sync` | Mesure le délai de synchronisation (voir `docs/mesures/synchronisation.md`) |
 
 Variables d'environnement : `PORT`, `DATABASE_URL`, `WEB_ORIGIN` (voir `.env.example`).
 

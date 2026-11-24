@@ -10,7 +10,8 @@
     "start": "node dist/main.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "measure:sync": "vitest run --config vitest.measure.config.ts"
   },
   "dependencies": {
     "@epiquest/db": "workspace:*",
