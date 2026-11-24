@@ -196,6 +196,7 @@ export const tableErrorCodeSchema = z.enum([
   "TOKEN_NOT_FOUND",
   "OUT_OF_MAP",
   "NO_HIT_POINTS",
+  "HIT_POINTS_ABOVE_MAXIMUM",
   "INVALID_DICE_NOTATION",
 ]);
 
