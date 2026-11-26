@@ -1,0 +1,1 @@
+ALTER TABLE "srd_monsters" ADD COLUMN "actions" jsonb DEFAULT '[]'::jsonb NOT NULL;

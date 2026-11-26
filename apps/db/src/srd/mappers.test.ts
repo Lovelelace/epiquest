@@ -31,6 +31,7 @@ describe("mapMonster", () => {
       challenge_rating: 0.125,
       armor_class: [{ value: 12 }, { value: 14 }],
       hit_points: 5,
+      actions: [],
     };
     expect(mapMonster(kobold)).toMatchObject({
       slug: "kobold",

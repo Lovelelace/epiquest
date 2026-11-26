@@ -1,5 +1,5 @@
 {
-  "id": "7716e8dd-ec8e-4e6d-a675-6f77c3a235da",
+  "id": "0fa89917-bc70-48a0-8ac0-787d4fb1b750",
   "prevId": "0cff1e80-a56c-42a3-a22b-90e0146dfbff",
   "version": "7",
   "dialect": "postgresql",
@@ -605,6 +605,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "actions": {
+          "name": "actions",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
         }
       },
       "indexes": {
@@ -1028,59 +1035,6 @@
           "value": "\"srd_spells\".\"level\" between 0 and 9"
         }
       },
-      "isRLSEnabled": false
-    },
-    "public.character_drafts": {
-      "name": "character_drafts",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "step": {
-          "name": "step",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'species'"
-        },
-        "choices": {
-          "name": "choices",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "ability_rolls": {
-          "name": "ability_rolls",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
       "isRLSEnabled": false
     }
   },
