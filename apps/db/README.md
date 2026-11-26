@@ -9,6 +9,7 @@ base (exception à la règle ARCH-06, voir `specs/01-architecture.md`).
 ```text
 src/
 ├── schema/        un fichier par feature (src/schema/<feature>.ts), réexporté par index.ts
+│   └── srd/       entités du SRD 5.1, un fichier par entité
 ├── seed/          données de la campagne de démonstration (à venir)
 ├── srd/           import du SRD 5.1, rejouable et versionné (à venir)
 ├── client.ts      createDatabase(url) : connexion Drizzle + postgres.js
@@ -16,6 +17,46 @@ src/
 └── migrate.ts     applique les migrations (script `migrate`)
 migrations/        migrations SQL générées par drizzle-kit (versionnées, jamais modifiées après merge)
 drizzle.config.ts  configuration de drizzle-kit
+```
+
+## Entités du SRD
+
+Les données du SRD 5.1 (CC BY 4.0, voir `NOTICE.md`) sont rangées dans des tables préfixées
+`srd_`. Toutes partagent les mêmes colonnes de base :
+
+| Colonne       | Rôle                                                                       |
+| ------------- | -------------------------------------------------------------------------- |
+| `id`          | UUID exposé aux clients                                                    |
+| `slug`        | Identifiant stable dans la source (`acid-arrow`), unique : clé de l'import |
+| `name`        | Nom anglais du SRD                                                         |
+| `description` | Texte de règles, paragraphes séparés par une ligne vide                    |
+| `raw`         | Entrée source complète (JSON), pour ce qui n'a pas de colonne dédiée       |
+| `search`      | `tsvector` calculé (nom en poids A, description en poids B), index GIN     |
+
+| Table               | Entité                  | Colonnes propres                                                                                      |
+| ------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `srd_species`       | Espèces et sous-espèces | `parent_id` (sous-espèce → espèce), `size`, `speed`                                                   |
+| `srd_classes`       | Classes                 | `hit_die` (6, 8, 10 ou 12)                                                                            |
+| `srd_subclasses`    | Sous-classes            | `class_id`                                                                                            |
+| `srd_backgrounds`   | Historiques             | aucune                                                                                                |
+| `srd_spells`        | Sorts                   | `level` (0 à 9), `school`, `casting_time`, `range`, `duration`, `is_ritual`, `requires_concentration` |
+| `srd_spell_classes` | Sorts ↔ classes         | `spell_id`, `class_id` (clé composée)                                                                 |
+| `srd_items`         | Objets                  | `kind` (`equipment` ou `magic_item`), `category`, `rarity`                                            |
+| `srd_monsters`      | Monstres                | `size`, `type`, `challenge_rating` (décimal : 1/8 = 0,125), `armor_class`, `hit_points`               |
+| `srd_conditions`    | États                   | aucune                                                                                                |
+
+Les tailles (`srd_size`) sont un enum PostgreSQL commun aux espèces et aux monstres. Supprimer
+une classe ou une espèce supprime ses sous-classes, sous-espèces et liens de sorts.
+
+Les types de lignes sont exportés par le paquet (`SrdSpell`, `NewSrdSpell`, `SrdMonster`…),
+déduits du schéma Drizzle.
+
+Recherche plein texte :
+
+```ts
+db.select()
+  .from(srdSpells)
+  .where(sql`${srdSpells.search} @@ plainto_tsquery('english', ${query})`);
 ```
 
 ## Ajouter ou modifier une table
