@@ -26,11 +26,11 @@ feat/42-analyseur-des ──PR──▶ develop ──PR de release──▶ mai
 
 ## Pipelines
 
-| Workflow                    | Déclencheur                                     | Étapes                                                                                                                                                           |
-| --------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ci.yml`                    | PR vers `develop` ou `main`, push sur `develop` | Installation verrouillée, lint, types, tests, build ; vérification des messages de commit ; scan de secrets (gitleaks) ; build de l'image Docker (cible `build`) |
-| `cd.yml`                    | Push sur `main`, ou lancement manuel            | Mêmes vérifications, puis déploiement via le secret `DEPLOY_HOOK_URL` (environnement GitHub `production`)                                                        |
-| `dependabot-auto-merge.yml` | PR ouverte par Dependabot                       | Approuve et active l'auto-merge (squash) des mises à jour mineures et correctives ; les majeures restent à relire                                                |
+| Workflow                    | Déclencheur                                      | Étapes                                                                                                                                                           |
+| --------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ci.yml`                    | Toute PR (y compris empilée), push sur `develop` | Installation verrouillée, lint, types, tests, build ; vérification des messages de commit ; scan de secrets (gitleaks) ; build de l'image Docker (cible `build`) |
+| `cd.yml`                    | Push sur `main`, ou lancement manuel             | Mêmes vérifications, puis déploiement via le secret `DEPLOY_HOOK_URL` (environnement GitHub `production`)                                                        |
+| `dependabot-auto-merge.yml` | PR ouverte par Dependabot                        | Approuve et active l'auto-merge (squash) des mises à jour mineures et correctives ; les majeures restent à relire                                                |
 
 Les secrets du pipeline sont stockés dans **Settings → Secrets and variables → Actions**, jamais
 dans le code. Tant que l'hébergeur n'est pas choisi, l'étape de déploiement affiche un
