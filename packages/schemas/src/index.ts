@@ -58,7 +58,6 @@ export {
   abilityBonusSchema,
   abilityMethodSchema,
   abilityRollSchema,
-  abilitySchema,
   abilityScoresSchema,
   attackSchema,
   characterActionSchema,
@@ -84,7 +83,6 @@ export {
   wizardStepSchema,
 } from "./characters.js";
 export type {
-  Ability,
   AbilityMethod,
   AbilityRoll,
   AbilityScores,
