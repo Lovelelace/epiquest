@@ -8,6 +8,7 @@ import type {
   NewSrdSpell,
   NewSrdSubclass,
 } from "../schema/index.js";
+import { convertMonsterAction } from "./monster-attacks.js";
 import type { SrdSource } from "./source.js";
 
 type Entry<K extends keyof SrdSource> = SrdSource[K][number];
@@ -94,6 +95,7 @@ export function mapMonster(monster: Entry<"monsters">): NewSrdMonster {
     challengeRating: monster.challenge_rating,
     armorClass: armorClass.value,
     hitPoints: monster.hit_points,
+    actions: monster.actions.map(convertMonsterAction),
   };
 }
 

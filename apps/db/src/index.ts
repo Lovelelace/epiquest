@@ -5,5 +5,6 @@ export { migrationsFolder } from "./paths.js";
 export * as schema from "./schema/index.js";
 export type * from "./schema/index.js";
 export { getImportedSrdVersion, importSrd } from "./srd/import.js";
-export type { SrdDatabase } from "./srd/import.js";
+export type { SrdDatabase, SrdImportReport } from "./srd/import.js";
+export type { MonsterAction, MonsterAttackReport } from "./srd/monster-attacks.js";
 export { SRD_SOURCE } from "./srd/version.js";

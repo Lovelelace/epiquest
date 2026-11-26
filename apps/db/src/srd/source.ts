@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod";
 import { srdDataFolder } from "../paths.js";
+import { sourceMonsterActionSchema } from "./monster-attacks.js";
 
 /** Référence vers une autre entrée de la source (`{ index, name, url }`). */
 const reference = z.looseObject({ index: z.string().min(1) });
@@ -49,6 +50,7 @@ export const sourceSchemas = {
     challenge_rating: z.number().nonnegative(),
     armor_class: z.array(z.looseObject({ value: z.number().int() })).min(1),
     hit_points: z.number().int().positive(),
+    actions: z.array(sourceMonsterActionSchema).default([]),
   }),
   conditions: z.looseObject({ ...entry, desc: paragraphs }),
 };
