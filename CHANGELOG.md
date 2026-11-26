@@ -8,6 +8,7 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 
 ### Ajouté
 
+- Assistant de création : étape des caractéristiques (achat de points avec budget restant, tableau standard, 4d6 tiré par le serveur), bonus d'espèce affichés ; options de création résolues depuis le SRD (`GET /character-drafts/:id/options`).
 - Assistant de création de personnage (web) : choix de l'espèce et de la sous-espèce, de la classe et de l'historique avec leur détail ; brouillon sauvegardé côté serveur (`/character-drafts`).
 - Contrats partagés du personnage (`@epiquest/schemas`) : brouillon de création, options de création, fiche, jets, actions de vie du personnage et montée de niveau.
 - Moteur de personnage (`@epiquest/rules`) : calcul des statistiques dérivées (caractéristiques, maîtrise, sauvegardes, compétences, CA, PV, emplacements de sorts, vitesse, encombrement).

@@ -36,6 +36,43 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
     wizard: { hit_die: 6, saving_throws: [{ name: "INT" }, { name: "WIS" }] },
     acolyte: { starting_proficiencies: [{ name: "Skill: Insight" }] },
   };
+  const options = {
+    skillChoice: { count: 2, options: ["arcana", "history", "insight", "investigation"] },
+    grantedSkills: ["perception", "insight", "religion"],
+    expertiseCount: 0,
+    originBonuses: [
+      { ability: "dex", amount: 2, source: "species" },
+      { ability: "int", amount: 1, source: "species" },
+    ],
+    subclass: { level: 2, options: [{ slug: "evocation", name: "Evocation" }] },
+    spellcasting: {
+      ability: "int",
+      cantripsKnown: 2,
+      maxSpells: 2,
+      maxSpellLevel: 1,
+      spellList: [
+        { slug: "fire-bolt", name: "Fire Bolt", level: 0 },
+        { slug: "light", name: "Light", level: 0 },
+        { slug: "mage-hand", name: "Mage Hand", level: 0 },
+        { slug: "magic-missile", name: "Magic Missile", level: 1 },
+        { slug: "shield", name: "Shield", level: 1 },
+        { slug: "sleep", name: "Sleep", level: 1 },
+      ],
+    },
+    fixedEquipment: [{ slug: "spellbook", name: "Spellbook", quantity: 1 }],
+    equipmentChoices: [
+      {
+        description: "(a) a quarterstaff or (b) a dagger",
+        options: [
+          {
+            label: "1 × Quarterstaff",
+            items: [{ slug: "quarterstaff", name: "Quarterstaff", quantity: 1 }],
+          },
+          { label: "1 × Dagger", items: [{ slug: "dagger", name: "Dagger", quantity: 1 }] },
+        ],
+      },
+    ],
+  };
   const json = (body: unknown, status = 200) =>
     Promise.resolve(
       new Response(JSON.stringify(body), {
@@ -47,6 +84,19 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
   const fetchMock = vi.fn((input: string, init?: RequestInit) => {
     const url = new URL(input);
     const [, first, second, third] = url.pathname.split("/");
+    if (first === "character-drafts" && third === "options") return json(options);
+    if (first === "character-drafts" && third === "ability-rolls") {
+      const abilityRolls = [15, 14, 13, 12, 10, 8].map((total) => ({
+        dice: [1, total - 12 > 0 ? 6 : 5, 4, 3],
+        total,
+      }));
+      draft = {
+        ...draft,
+        abilityRolls,
+        choices: { ...draft.choices, abilityMethod: "rolled", baseAbilityScores: null },
+      };
+      return json(draft, 201);
+    }
     if (first === "character-drafts") {
       if (init?.method === "PATCH") {
         const update = JSON.parse(String(init.body)) as {

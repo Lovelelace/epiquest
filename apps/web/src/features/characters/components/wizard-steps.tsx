@@ -1,10 +1,13 @@
 import type { CharacterDraft, DraftChoices, WizardStep } from "@epiquest/schemas";
 import type { ReactNode } from "react";
+import { AbilitiesStep } from "./AbilitiesStep";
 import { OriginStep } from "./OriginStep";
 
 export interface StepContext {
   draft: CharacterDraft;
   update: (choices: Partial<DraftChoices>) => void;
+  /** Tirage 4d6 des caractéristiques, fait par le serveur. */
+  rollAbilities: () => void;
 }
 
 export interface WizardStepDefinition {
@@ -57,6 +60,20 @@ export const WIZARD_STEPS: WizardStepDefinition[] = [
         legend="Historique"
         value={draft.choices.background}
         onChange={(background) => update({ background })}
+      />
+    ),
+  },
+  {
+    id: "abilities",
+    label: "Caractéristiques",
+    isComplete: (draft) => draft.choices.baseAbilityScores !== null,
+    blockedMessage: "Répartissez les six valeurs de caractéristique pour continuer.",
+    render: ({ draft, update, rollAbilities }) => (
+      <AbilitiesStep
+        key={draft.choices.abilityMethod ?? "none"}
+        draft={draft}
+        update={update}
+        roll={rollAbilities}
       />
     ),
   },
