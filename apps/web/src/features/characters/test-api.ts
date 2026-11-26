@@ -1,5 +1,6 @@
 import { EMPTY_DRAFT_CHOICES, type CharacterDraft } from "@epiquest/schemas";
 import { vi } from "vitest";
+import { TEST_CHARACTER } from "./test-character";
 
 /** Faux serveur pour les tests de l'assistant : brouillon en mémoire et quelques entrées du SRD. */
 export function mockApi(initial: Partial<CharacterDraft> = {}) {
@@ -85,6 +86,20 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
     const url = new URL(input);
     const [, first, second, third] = url.pathname.split("/");
     if (first === "character-drafts" && third === "options") return json(options);
+    if (first === "character-drafts" && third === "preview") {
+      const violations = draft.choices.name
+        ? []
+        : [{ code: "NAME_REQUIRED", message: "Donnez un nom à votre personnage.", path: "name" }];
+      return json({ violations, statistics: null });
+    }
+    if (first === "character-drafts" && third === "character") {
+      return draft.choices.name
+        ? json(TEST_CHARACTER, 201)
+        : json(
+            { code: "CHARACTER_INVALID", message: "Le personnage ne respecte pas les règles." },
+            422,
+          );
+    }
     if (first === "character-drafts" && third === "ability-rolls") {
       const abilityRolls = [15, 14, 13, 12, 10, 8].map((total) => ({
         dice: [1, total - 12 > 0 ? 6 : 5, 4, 3],

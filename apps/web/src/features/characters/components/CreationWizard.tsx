@@ -1,6 +1,7 @@
 "use client";
 
 import type { CharacterDraft, CharacterDraftUpdate, WizardStep } from "@epiquest/schemas";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { getDraft, rollAbilities, updateDraft } from "../api";
 import { WIZARD_STEPS, type StepContext } from "./wizard-steps";
@@ -16,6 +17,7 @@ export function CreationWizard({ draftId }: CreationWizardProps) {
   const [error, setError] = useState<string | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const hasNavigated = useRef(false);
+  const router = useRouter();
 
   useEffect(() => {
     getDraft(draftId)
@@ -63,6 +65,7 @@ export function CreationWizard({ draftId }: CreationWizardProps) {
         })
         .catch(() => setError("Le tirage a échoué. Réessayez."));
     },
+    onCreated: (character) => router.push(`/personnages/${character.id}`),
   };
   const previous = WIZARD_STEPS[stepIndex - 1];
   const next = WIZARD_STEPS[stepIndex + 1];

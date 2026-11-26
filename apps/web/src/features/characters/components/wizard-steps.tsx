@@ -1,13 +1,18 @@
-import type { CharacterDraft, DraftChoices, WizardStep } from "@epiquest/schemas";
+import type { Character, CharacterDraft, DraftChoices, WizardStep } from "@epiquest/schemas";
 import type { ReactNode } from "react";
 import { AbilitiesStep } from "./AbilitiesStep";
+import { EquipmentStep } from "./EquipmentStep";
 import { OriginStep } from "./OriginStep";
+import { SkillsStep } from "./SkillsStep";
+import { SpellsStep } from "./SpellsStep";
+import { SummaryStep } from "./SummaryStep";
 
 export interface StepContext {
   draft: CharacterDraft;
   update: (choices: Partial<DraftChoices>) => void;
   /** Tirage 4d6 des caractéristiques, fait par le serveur. */
   rollAbilities: () => void;
+  onCreated: (character: Character) => void;
 }
 
 export interface WizardStepDefinition {
@@ -75,6 +80,36 @@ export const WIZARD_STEPS: WizardStepDefinition[] = [
         update={update}
         roll={rollAbilities}
       />
+    ),
+  },
+  {
+    id: "skills",
+    label: "Compétences",
+    isComplete: (draft) => draft.choices.chosenSkills.length > 0,
+    blockedMessage: "Choisissez vos compétences de classe pour continuer.",
+    render: ({ draft, update }) => <SkillsStep draft={draft} update={update} />,
+  },
+  {
+    id: "equipment",
+    label: "Équipement",
+    isComplete: () => true,
+    blockedMessage: "",
+    render: ({ draft, update }) => <EquipmentStep draft={draft} update={update} />,
+  },
+  {
+    id: "spells",
+    label: "Sorts",
+    isComplete: () => true,
+    blockedMessage: "",
+    render: ({ draft, update }) => <SpellsStep draft={draft} update={update} />,
+  },
+  {
+    id: "summary",
+    label: "Récapitulatif",
+    isComplete: () => true,
+    blockedMessage: "",
+    render: ({ draft, update, onCreated }) => (
+      <SummaryStep draft={draft} update={update} onCreated={onCreated} />
     ),
   },
 ];
