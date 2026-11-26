@@ -8,6 +8,7 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 
 ### Ajouté
 
+- Vie du personnage : dégâts, soins et PV temporaires, repos court (dés de vie tirés par le serveur) et long, inventaire avec poids porté et encombrement recalculés, argent avec rendu de monnaie, notes ; chaque modification est enregistrée et historisée (`POST /characters/:id/actions`, `GET /characters/:id/history`).
 - Fiche de personnage interactive (`/personnages/[id]`) : un clic ou Entrée sur une compétence, une sauvegarde, une caractéristique, l'initiative ou une attaque lance le jet côté serveur (`POST /characters/:id/rolls`) ; visibilité publique, privée ou cachée ; résultat annoncé aux lecteurs d'écran.
 - Assistant de création : étapes compétences (et expertise), équipement de départ, sorts, récapitulatif avec les statistiques du moteur ; création refusée par le serveur si une règle n'est pas respectée. Documentation utilisateur : `docs/utilisateur/creer-un-personnage.md`.
 - Assistant de création : étape des caractéristiques (achat de points avec budget restant, tableau standard, 4d6 tiré par le serveur), bonus d'espèce affichés ; options de création résolues depuis le SRD (`GET /character-drafts/:id/options`).

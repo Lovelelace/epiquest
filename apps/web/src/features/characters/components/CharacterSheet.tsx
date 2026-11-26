@@ -10,6 +10,7 @@ import type {
 import { useEffect, useState } from "react";
 import { getCharacter, getRecentRolls, rollFromSheet } from "../api";
 import { describeRoll, signed, VISIBILITY_LABELS } from "../roll-text";
+import { LifePanel } from "./LifePanel";
 
 const VISIBILITIES: RollVisibility[] = ["public", "private", "hidden"];
 const PROFICIENCY_MARKS = { none: "", proficient: " (maîtrise)", expertise: " (expertise)" };
@@ -93,7 +94,7 @@ export function CharacterSheet({ characterId }: { characterId: string }) {
 
       <p
         role="status"
-        aria-live="polite"
+        aria-label="Résultat du jet"
         className="min-h-6 rounded bg-slate-100 px-3 py-2 font-medium"
       >
         {announcement}
@@ -235,6 +236,8 @@ export function CharacterSheet({ characterId }: { characterId: string }) {
           ))}
         </ul>
       </section>
+
+      <LifePanel character={character} onChange={setCharacter} />
 
       <section aria-labelledby="rolls-title">
         <h2 id="rolls-title" className="text-2xl font-semibold">

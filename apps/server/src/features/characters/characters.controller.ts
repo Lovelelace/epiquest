@@ -1,11 +1,14 @@
 import {
+  characterActionSchema,
   characterRollRequestSchema,
   type Character,
+  type CharacterHistoryEntry,
   type CharacterRoll,
   type CreationPreview,
 } from "@epiquest/schemas";
 import { Body, Controller, Get, HttpCode, Param, ParseUUIDPipe, Post } from "@nestjs/common";
 import { parseOrReject } from "../../shared/validation/parse-or-reject.js";
+import { CharacterLifeService } from "./character-life.service.js";
 import { CharacterRollsService } from "./character-rolls.service.js";
 import { CharactersService } from "./characters.service.js";
 
@@ -15,6 +18,7 @@ export class CharactersController {
   constructor(
     private readonly characters: CharactersService,
     private readonly rolls: CharacterRollsService,
+    private readonly life: CharacterLifeService,
   ) {}
 
   /** Récapitulatif avant création : erreurs restantes et statistiques calculées. */
@@ -53,5 +57,17 @@ export class CharactersController {
   @Get("characters/:id/rolls")
   recentRolls(@Param("id", ParseUUIDPipe) id: string): Promise<CharacterRoll[]> {
     return this.rolls.recent(id);
+  }
+
+  /** Vie du personnage : PV, repos, inventaire, argent, notes. Chaque action est historisée. */
+  @Post("characters/:id/actions")
+  @HttpCode(200)
+  act(@Param("id", ParseUUIDPipe) id: string, @Body() body: unknown): Promise<Character> {
+    return this.life.act(id, parseOrReject(characterActionSchema, body, "Action invalide."));
+  }
+
+  @Get("characters/:id/history")
+  history(@Param("id", ParseUUIDPipe) id: string): Promise<CharacterHistoryEntry[]> {
+    return this.life.history(id);
   }
 }

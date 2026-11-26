@@ -83,6 +83,7 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
     );
 
   const rollRequests: object[] = [];
+  const actions: object[] = [];
   const fetchMock = vi.fn((input: string, init?: RequestInit) => {
     const url = new URL(input);
     const [, first, second, third] = url.pathname.split("/");
@@ -107,6 +108,23 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
       return json(roll, 201);
     }
     if (first === "characters" && third === "rolls") return json([]);
+    if (first === "characters" && third === "history") return json([]);
+    if (first === "characters" && third === "actions") {
+      const action = JSON.parse(String(init?.body)) as { type: string; amount?: number };
+      actions.push(action);
+      if (action.type === "money")
+        return json(
+          { code: "INSUFFICIENT_FUNDS", message: "La bourse ne contient pas assez d'argent." },
+          422,
+        );
+      const current =
+        TEST_CHARACTER.state.currentHitPoints -
+        (action.type === "damage" ? (action.amount ?? 0) : 0);
+      return json({
+        ...TEST_CHARACTER,
+        state: { ...TEST_CHARACTER.state, currentHitPoints: current },
+      });
+    }
     if (first === "characters") return json(TEST_CHARACTER);
     if (first === "character-drafts" && third === "options") return json(options);
     if (first === "character-drafts" && third === "preview") {
@@ -162,5 +180,5 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
     return json({ code: "NOT_FOUND", message: "Introuvable" }, 404);
   });
   vi.stubGlobal("fetch", fetchMock);
-  return { fetchMock, current: () => draft, rollRequests };
+  return { fetchMock, current: () => draft, rollRequests, actions };
 }
