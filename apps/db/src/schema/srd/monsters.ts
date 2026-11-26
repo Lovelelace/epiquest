@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
-import { check, doublePrecision, index, integer, pgTable, text } from "drizzle-orm/pg-core";
+import { check, doublePrecision, index, integer, jsonb, pgTable, text } from "drizzle-orm/pg-core";
+import type { MonsterAction } from "../../srd/monster-attacks.js";
 import { srdColumns, srdSize } from "./common.js";
 
 /** Monstres et PNJ. Le facteur de puissance est un nombre décimal (1/8 = 0,125). */
@@ -12,6 +13,8 @@ export const srdMonsters = pgTable(
     challengeRating: doublePrecision("challenge_rating").notNull(),
     armorClass: integer("armor_class").notNull(),
     hitPoints: integer("hit_points").notNull(),
+    /** Actions du monstre ; les attaques sont converties en effets quand c'est possible. */
+    actions: jsonb("actions").$type<MonsterAction[]>().notNull().default([]),
   },
   (table) => [
     check("srd_monsters_challenge_rating_check", sql`${table.challengeRating} >= 0`),

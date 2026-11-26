@@ -41,6 +41,9 @@ importers:
 
   apps/db:
     dependencies:
+      '@epiquest/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       drizzle-orm:
         specifier: ^0.45.4
         version: 0.45.4(@electric-sql/pglite@0.6.0)(postgres@4.1.1)

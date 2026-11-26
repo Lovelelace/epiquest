@@ -1,5 +1,6 @@
-import { ABILITIES, SKILLS } from "@epiquest/rules";
+import { SKILLS } from "@epiquest/rules";
 import { z } from "zod";
+import { abilitySchema } from "./effects.js";
 
 // Contrats du personnage : création (brouillon), fiche, jets, vie du personnage et montée de niveau.
 
@@ -7,7 +8,6 @@ const slug = z.string().trim().min(1).max(100);
 const isoDate = z.iso.datetime({ offset: true });
 const nonNegative = z.number().int().min(0);
 
-export const abilitySchema = z.enum(ABILITIES);
 export const skillSchema = z.enum(SKILLS);
 export const abilityScoresSchema = z.object({
   str: z.number().int().min(1).max(30),
@@ -329,7 +329,6 @@ export const levelUpRequestSchema = z.object({
   spells: z.array(slug).max(30).optional(),
 });
 
-export type Ability = z.infer<typeof abilitySchema>;
 export type AbilityScores = z.infer<typeof abilityScoresSchema>;
 export type AbilityMethod = z.infer<typeof abilityMethodSchema>;
 export type RuleViolation = z.infer<typeof ruleViolationSchema>;
