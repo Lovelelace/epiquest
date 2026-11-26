@@ -13,14 +13,7 @@ import type {
   CreationOptions,
 } from "@epiquest/schemas";
 
-export const ABILITY_NAMES: Record<Ability, string> = {
-  str: "Force",
-  dex: "Dextérité",
-  con: "Constitution",
-  int: "Intelligence",
-  wis: "Sagesse",
-  cha: "Charisme",
-};
+export { ABILITY_LABELS as ABILITY_NAMES } from "@epiquest/rules";
 
 export const METHOD_NAMES: Record<AbilityMethod, string> = {
   "point-buy": "Achat de points",

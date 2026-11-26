@@ -2,6 +2,16 @@
 export const ABILITIES = ["str", "dex", "con", "int", "wis", "cha"] as const;
 export type Ability = (typeof ABILITIES)[number];
 
+/** Noms français des caractéristiques, pour les libellés affichés. */
+export const ABILITY_LABELS: Record<Ability, string> = {
+  str: "Force",
+  dex: "Dextérité",
+  con: "Constitution",
+  int: "Intelligence",
+  wis: "Sagesse",
+  cha: "Charisme",
+};
+
 /**
  * Modificateur d'une valeur de caractéristique : floor((valeur - 10) / 2).
  * Exemple : 8 → -1, 10 → 0, 15 → +2, 20 → +5.

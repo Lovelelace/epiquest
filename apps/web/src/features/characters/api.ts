@@ -1,5 +1,6 @@
 import {
   characterDraftSchema,
+  characterRollSchema,
   characterSchema,
   creationOptionsSchema,
   creationPreviewSchema,
@@ -8,6 +9,8 @@ import {
   srdSummarySchemas,
   type Character,
   type CharacterDraft,
+  type CharacterRoll,
+  type CharacterRollRequest,
   type CharacterDraftUpdate,
   type CreationOptions,
   type CreationPreview,
@@ -61,6 +64,20 @@ export function createCharacter(draftId: string): Promise<Character> {
 
 export function getCharacter(id: string): Promise<Character> {
   return apiRequest(characterSchema, `/characters/${id}`);
+}
+
+export function rollFromSheet(
+  characterId: string,
+  request: CharacterRollRequest,
+): Promise<CharacterRoll> {
+  return apiRequest(characterRollSchema, `/characters/${characterId}/rolls`, {
+    method: "POST",
+    body: request,
+  });
+}
+
+export function getRecentRolls(characterId: string): Promise<CharacterRoll[]> {
+  return apiRequest(characterRollSchema.array(), `/characters/${characterId}/rolls`);
 }
 
 /** Toutes les options d'une entité du SRD (au plus une page de 100, suffisant pour les origines). */

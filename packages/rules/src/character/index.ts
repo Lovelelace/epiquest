@@ -19,7 +19,7 @@ export type {
 } from "./derive.js";
 export { averageHitDieGain, hitPointMaximum } from "./hit-points.js";
 export type { HitPointInput } from "./hit-points.js";
-export { isSkill, SKILL_ABILITIES, SKILLS } from "./skills.js";
+export { isSkill, SKILL_ABILITIES, SKILL_LABELS, SKILLS } from "./skills.js";
 export type { Skill } from "./skills.js";
 export { speed } from "./speed.js";
 export { highestSpellLevel, spellSlots } from "./spell-slots.js";
@@ -79,3 +79,5 @@ export {
   rollAbilityScores,
 } from "./ability-rolls.js";
 export type { AbilityScoreRoll, RollDie } from "./ability-rolls.js";
+export { D20_SIDES, rollCheck, rollDamage } from "./checks.js";
+export type { RolledDie, RollResult } from "./checks.js";

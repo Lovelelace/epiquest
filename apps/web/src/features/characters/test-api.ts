@@ -82,9 +82,32 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
       }),
     );
 
+  const rollRequests: object[] = [];
   const fetchMock = vi.fn((input: string, init?: RequestInit) => {
     const url = new URL(input);
     const [, first, second, third] = url.pathname.split("/");
+    if (first === "characters" && third === "rolls" && init?.method === "POST") {
+      const request = JSON.parse(String(init.body)) as {
+        kind: string;
+        key?: string;
+        visibility: string;
+      };
+      const isHidden = request.visibility === "hidden";
+      const roll = {
+        id: crypto.randomUUID(),
+        label: request.kind === "skill" && request.key === "arcana" ? "Arcanes" : "Initiative",
+        expression: "1d20 + 5",
+        dice: isHidden ? [] : [{ sides: 20, value: 11 }],
+        modifier: 5,
+        total: isHidden ? null : 16,
+        visibility: request.visibility,
+        rolledAt: "2026-11-23T10:00:00.000Z",
+      };
+      rollRequests.push(request);
+      return json(roll, 201);
+    }
+    if (first === "characters" && third === "rolls") return json([]);
+    if (first === "characters") return json(TEST_CHARACTER);
     if (first === "character-drafts" && third === "options") return json(options);
     if (first === "character-drafts" && third === "preview") {
       const violations = draft.choices.name
@@ -139,5 +162,5 @@ export function mockApi(initial: Partial<CharacterDraft> = {}) {
     return json({ code: "NOT_FOUND", message: "Introuvable" }, 404);
   });
   vi.stubGlobal("fetch", fetchMock);
-  return { fetchMock, current: () => draft };
+  return { fetchMock, current: () => draft, rollRequests };
 }

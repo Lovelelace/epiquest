@@ -1,19 +1,7 @@
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createTestApp, type TestApp } from "./test-app.js";
-
-/** Magicien haut-elfe acolyte : le personnage de référence « high-elf-wizard » au niveau 1. */
-const WIZARD_CHOICES = {
-  name: "Elara",
-  species: "high-elf",
-  class: "wizard",
-  background: "acolyte",
-  abilityMethod: "standard-array",
-  baseAbilityScores: { str: 8, dex: 13, con: 14, int: 15, wis: 12, cha: 10 },
-  chosenSkills: ["arcana", "investigation"],
-  cantrips: ["fire-bolt", "light", "mage-hand"],
-  spells: ["magic-missile", "shield"],
-};
+import { draftWith as createDraft, WIZARD_CHOICES } from "./test-characters.js";
 
 describe("Création d'un personnage depuis l'assistant", () => {
   let testApp: TestApp;
@@ -27,17 +15,7 @@ describe("Création d'un personnage depuis l'assistant", () => {
     await testApp.close();
   });
 
-  async function draftWith(choices: object): Promise<string> {
-    const { body } = await http().post("/character-drafts");
-    const id = body.id as string;
-    await http().patch(`/character-drafts/${id}`).send({ choices }).expect(200);
-    const options = await http().get(`/character-drafts/${id}/options`);
-    if (options.status === 200) {
-      const equipment = options.body.equipmentChoices.map(() => 0);
-      await http().patch(`/character-drafts/${id}`).send({ choices: { equipment } }).expect(200);
-    }
-    return id;
-  }
+  const draftWith = (choices: object) => createDraft(testApp, choices);
 
   it("donne un aperçu sans erreur avec les statistiques du moteur", async () => {
     const id = await draftWith(WIZARD_CHOICES);
