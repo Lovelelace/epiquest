@@ -34,6 +34,8 @@ export interface CharacterChoices {
   baseAbilityScores: AbilityScores;
   abilityBonuses: readonly AbilityBonus[];
   chosenSkills: readonly Skill[];
+  /** Compétences maîtrisées dont le bonus de maîtrise est doublé. */
+  expertise: readonly Skill[];
   subclass: string | null;
   cantrips: readonly string[];
   spells: readonly string[];
@@ -49,6 +51,8 @@ export interface CreationRules {
   skillChoice: { count: number; options: readonly Skill[] };
   /** Compétences déjà données par l'espèce et l'historique. */
   grantedSkills: readonly Skill[];
+  /** Nombre de compétences avec expertise à choisir. */
+  expertiseCount: number;
   subclass: { level: number; options: readonly string[] };
   abilityScoreImprovementLevels: readonly number[];
   /** Bonus d'espèce et d'historique attendus, à l'identique. */
@@ -75,6 +79,8 @@ export type ValidationErrorCode =
   | "SKILL_COUNT"
   | "SKILL_NOT_ALLOWED"
   | "SKILL_DUPLICATE"
+  | "EXPERTISE_COUNT"
+  | "EXPERTISE_NOT_PROFICIENT"
   | "SUBCLASS_REQUIRED"
   | "SUBCLASS_TOO_EARLY"
   | "SUBCLASS_NOT_ALLOWED"
@@ -215,6 +221,26 @@ function validateSkills(choices: CharacterChoices, rules: CreationRules, errors:
   });
 }
 
+function validateExpertise(choices: CharacterChoices, rules: CreationRules, errors: Errors): void {
+  if (choices.expertise.length !== rules.expertiseCount) {
+    errors.push({
+      code: "EXPERTISE_COUNT",
+      message: `Choisissez exactement ${rules.expertiseCount} compétences pour l'expertise (${choices.expertise.length} choisies).`,
+      path: "expertise",
+    });
+  }
+  const proficient = [...rules.grantedSkills, ...choices.chosenSkills];
+  choices.expertise.forEach((skill, position) => {
+    if (!proficient.includes(skill) || choices.expertise.indexOf(skill) !== position) {
+      errors.push({
+        code: "EXPERTISE_NOT_PROFICIENT",
+        message: `L'expertise demande une compétence maîtrisée, choisie une seule fois (« ${skill} »).`,
+        path: `expertise.${position}`,
+      });
+    }
+  });
+}
+
 function validateSubclass(choices: CharacterChoices, rules: CreationRules, errors: Errors): void {
   const { level, options } = rules.subclass;
   if (choices.level < level) {
@@ -327,6 +353,7 @@ export function validateCharacterChoices(
   validateBaseScores(choices, rules, errors);
   if (errors.length === 0) validateBonuses(choices, rules, errors);
   validateSkills(choices, rules, errors);
+  validateExpertise(choices, rules, errors);
   validateSubclass(choices, rules, errors);
   validateSpells(choices, rules, errors);
   return errors;

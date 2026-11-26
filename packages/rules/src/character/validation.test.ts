@@ -13,6 +13,7 @@ const rules: CreationRules = {
     options: ["arcana", "history", "insight", "investigation", "medicine", "religion"],
   },
   grantedSkills: ["perception", "insight", "religion"],
+  expertiseCount: 0,
   subclass: { level: 2, options: ["evocation"] },
   abilityScoreImprovementLevels: [4, 8, 12, 16, 19],
   originBonuses: [
@@ -43,6 +44,7 @@ const valid: CharacterChoices = {
   baseAbilityScores: { str: 8, dex: 13, con: 14, int: 15, wis: 12, cha: 10 },
   abilityBonuses: rules.originBonuses,
   chosenSkills: ["arcana", "investigation"],
+  expertise: [],
   subclass: null,
   cantrips: ["fire-bolt", "light", "mage-hand"],
   spells: ["magic-missile", "shield"],
@@ -161,6 +163,22 @@ describe("validateCharacterChoices", () => {
 
     it("refuse une compétence choisie deux fois", () => {
       expect(codes({ chosenSkills: ["arcana", "arcana"] })).toEqual(["SKILL_DUPLICATE"]);
+    });
+  });
+
+  describe("expertise", () => {
+    it("exige le nombre de compétences avec expertise", () => {
+      expect(codes({}, { expertiseCount: 2 })).toEqual(["EXPERTISE_COUNT"]);
+      expect(codes({ expertise: ["arcana", "perception"] }, { expertiseCount: 2 })).toEqual([]);
+    });
+
+    it("refuse l'expertise sur une compétence non maîtrisée ou en double", () => {
+      expect(codes({ expertise: ["stealth"] }, { expertiseCount: 1 })).toEqual([
+        "EXPERTISE_NOT_PROFICIENT",
+      ]);
+      expect(codes({ expertise: ["arcana", "arcana"] }, { expertiseCount: 2 })).toEqual([
+        "EXPERTISE_NOT_PROFICIENT",
+      ]);
     });
   });
 
