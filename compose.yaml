@@ -27,12 +27,13 @@ services:
       timeout: 3s
       retries: 10
 
-  # Applique les migrations Drizzle, puis s'arrête. Le seed et l'import du SRD s'y ajouteront.
+  # Applique les migrations Drizzle et importe le SRD (rejouable), puis s'arrête.
   migrate:
     build:
       context: .
       target: dev
-    command: ["pnpm", "--filter", "@epiquest/db", "migrate"]
+    command:
+      ["sh", "-c", "pnpm --filter @epiquest/db migrate && pnpm --filter @epiquest/db srd:import"]
     environment: *app-environment
     depends_on:
       db:
@@ -42,6 +43,9 @@ services:
         # Nouvelle migration : l'image est reconstruite et les migrations sont rejouées.
         - action: rebuild
           path: ./apps/db/migrations
+        # Nouvelle version du SRD ou de l'import : l'import est rejoué.
+        - action: rebuild
+          path: ./apps/db/src/srd
 
   # Conteneur à la demande (tests ponctuels, shell). Profil « tools » : il n'est pas
   # démarré par `docker compose up` ni `watch`, mais `docker compose run dev` l'active.
