@@ -1,8 +1,8 @@
 name: CI
 
 on:
+  # Toute PR, y compris une PR empilée qui vise une autre branche de feature.
   pull_request:
-    branches: [main, develop]
   push:
     branches: [develop]
 
