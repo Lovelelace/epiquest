@@ -1,16 +1,24 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import axe from "axe-core";
 import { afterEach, describe, expect, it } from "vitest";
+import type { TableAck } from "@epiquest/schemas";
 import { gmState } from "../test-fixtures";
 import { GmTable } from "./GmTable";
 
 afterEach(cleanup);
 
 const PLAYERS_HREF = "/campagnes/x/joueurs?utilisateur=demo-gm";
+const send = (): Promise<TableAck> => Promise.resolve({ ok: true });
 
 const renderGm = () =>
   render(
-    <GmTable state={gmState} status="connected" refusal={null} playersViewHref={PLAYERS_HREF} />,
+    <GmTable
+      state={gmState}
+      status="connected"
+      refusal={null}
+      playersViewHref={PLAYERS_HREF}
+      send={send}
+    />,
   );
 
 describe("GmTable", () => {
@@ -39,6 +47,7 @@ describe("GmTable", () => {
         status="refused"
         refusal="Cette action est réservée au MJ."
         playersViewHref={PLAYERS_HREF}
+        send={send}
       />,
     );
     expect(screen.getByRole("status").textContent).toContain("Cette action est réservée au MJ.");

@@ -9,6 +9,7 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 ### Ajouté
 
 - Table en temps réel : vue MJ et vue joueurs en lecture seule dans une seconde fenêtre, sur la campagne de démonstration.
+- Commandes du MJ synchronisées avec la vue joueurs : déplacements, brouillard, visibilité des jetons, PV (état approximatif pour les joueurs), jets publics et secrets.
 - Squelettes des applications : `apps/server` (NestJS, Socket.IO, `GET /health`), `apps/web` (Next.js App Router, Tailwind), `apps/mobile` (Expo Router, Android), `apps/db` (Drizzle, migration initiale, script de migration).
 - Paquet `@epiquest/schemas` : contrats zod partagés.
 - Docker Compose : service `migrate` (migrations automatiques), API et web exposés en mode watch sur les ports 3000 et 3001.

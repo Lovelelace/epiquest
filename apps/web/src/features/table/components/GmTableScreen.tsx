@@ -13,8 +13,18 @@ export function GmTableScreen({
   userId: string;
   playersViewHref: string;
 }) {
-  const { status, refusal, snapshot } = useTableConnection({ campaignId, userId, audience: "gm" });
+  const { status, refusal, snapshot, send } = useTableConnection({
+    campaignId,
+    userId,
+    audience: "gm",
+  });
   return (
-    <GmTable state={snapshot} status={status} refusal={refusal} playersViewHref={playersViewHref} />
+    <GmTable
+      state={snapshot}
+      status={status}
+      refusal={refusal}
+      playersViewHref={playersViewHref}
+      send={send}
+    />
   );
 }
