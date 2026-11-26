@@ -8,8 +8,18 @@ import {
   levelUpRequestSchema,
   type LevelUpOptions,
 } from "@epiquest/schemas";
-import { Body, Controller, Get, HttpCode, Param, ParseUUIDPipe, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  StreamableFile,
+} from "@nestjs/common";
 import { parseOrReject } from "../../shared/validation/parse-or-reject.js";
+import { renderCharacterSheetPdf } from "./character-sheet-pdf.js";
 import { CharacterLevelUpService } from "./character-level-up.service.js";
 import { CharacterLifeService } from "./character-life.service.js";
 import { CharacterRollsService } from "./character-rolls.service.js";
@@ -89,5 +99,22 @@ export class CharactersController {
       id,
       parseOrReject(levelUpRequestSchema, body, "Montée de niveau invalide."),
     );
+  }
+
+  /** Fiche en PDF balisé (accessible), à télécharger. */
+  @Get("characters/:id/sheet.pdf")
+  async sheetPdf(@Param("id", ParseUUIDPipe) id: string): Promise<StreamableFile> {
+    const character = await this.characters.get(id);
+    const fileName =
+      character.name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "") || "personnage";
+    return new StreamableFile(await renderCharacterSheetPdf(character), {
+      type: "application/pdf",
+      disposition: `attachment; filename="${fileName}.pdf"`,
+    });
   }
 }

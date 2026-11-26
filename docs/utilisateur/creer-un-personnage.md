@@ -30,6 +30,10 @@ Sur la fiche, la section « Monter de niveau » propose le niveau suivant, jusqu
 
 Le serveur vérifie les choix avec les règles du nouveau niveau ; s'il refuse, le message indique quoi corriger. Les PV perdus restent perdus : la montée ajoute seulement la différence de PV maximum.
 
+## Exporter la fiche en PDF
+
+Le lien « Exporter la fiche en PDF », sous le nom du personnage, télécharge sa fiche. Le PDF est balisé : son texte se sélectionne et un lecteur d'écran y lit les titres et les listes dans l'ordre. Les noms issus du SRD (sorts, objets, capacités) restent en anglais.
+
 ## Au clavier
 
 - `Tab` et `Maj + Tab` passent d'un groupe d'options à l'autre ; les flèches changent d'option dans un groupe.

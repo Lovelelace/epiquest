@@ -8,6 +8,7 @@ Toutes les évolutions notables sont consignées ici. Le format suit
 
 ### Ajouté
 
+- Export de la fiche de personnage en PDF balisé (`GET /characters/:id/sheet.pdf`, lien « Exporter la fiche en PDF » sur la fiche) : statistiques, sauvegardes, compétences, attaques, sorts, capacités, inventaire, argent et notes ; texte sélectionnable, titres et listes balisés, langue et titre déclarés, attribution CC BY 4.0 du SRD.
 - Montée de niveau du niveau 2 au niveau 5 (`GET` et `POST /characters/:id/level-up`) : PV à la moyenne ou tirés par le serveur, sous-classe, augmentation de caractéristique (+2 ou +1/+1), expertise, nouveaux sorts mineurs et sorts ; choix validés par le moteur au nouveau niveau, montée historisée. Formulaire sur la fiche.
 - Vie du personnage : dégâts, soins et PV temporaires, repos court (dés de vie tirés par le serveur) et long, inventaire avec poids porté et encombrement recalculés, argent avec rendu de monnaie, notes ; chaque modification est enregistrée et historisée (`POST /characters/:id/actions`, `GET /characters/:id/history`).
 - Fiche de personnage interactive (`/personnages/[id]`) : un clic ou Entrée sur une compétence, une sauvegarde, une caractéristique, l'initiative ou une attaque lance le jet côté serveur (`POST /characters/:id/rolls`) ; visibilité publique, privée ou cachée ; résultat annoncé aux lecteurs d'écran.
