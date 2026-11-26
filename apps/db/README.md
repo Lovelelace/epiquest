@@ -75,6 +75,23 @@ migrations appliquées). Docker Compose le lance après les migrations (service 
 - **Version enregistrée** : la table `srd_imports` garde, par version du SRD, le dépôt, le tag, le
   commit et la date du dernier import. `getImportedSrdVersion(db)` la renvoie.
 
+### Conversion des attaques de monstres
+
+Pendant l'import, chaque action de monstre est stockée dans `srd_monsters.actions` (JSON) avec
+son texte et, pour les attaques, ses effets au format `ActionEffects` de `@epiquest/schemas`
+(`src/srd/monster-attacks.ts`) :
+
+| `conversion` | Sens                                                                                                                    |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `full`       | Jet d'attaque, allonge ou portée et dégâts convertis ; le texte ne décrit rien d'autre                                  |
+| `partial`    | Jet et dégâts convertis, mais le texte ajoute un effet (état, sauvegarde, dégâts au choix) que le MJ applique à la main |
+| `none`       | Pas d'effets : action sans jet d'attaque ou attaque non reconnue (`reason`)                                             |
+
+Dégâts au choix (arme polyvalente) : la première option de la source est gardée. Les dégâts
+liés à une sauvegarde ne sont pas ajoutés au coup. La commande d'import affiche le taux de
+conversion et la liste des attaques non converties. Seules les `actions` sont converties, pas
+les actions légendaires ni les réactions.
+
 Changer de version : recopier les fichiers depuis le nouveau tag dans `src/srd/data/`, mettre à
 jour `src/srd/version.ts`, relancer les tests (`pnpm --filter @epiquest/db test`).
 

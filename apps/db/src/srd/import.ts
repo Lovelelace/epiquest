@@ -13,8 +13,14 @@ import {
   mapSubclass,
   mapSubrace,
 } from "./mappers.js";
+import { reportMonsterAttacks, type MonsterAttackReport } from "./monster-attacks.js";
 import { loadSrdSource, type SrdSource } from "./source.js";
 import { SRD_SOURCE } from "./version.js";
+
+/** Bilan d'un import du SRD. */
+export interface SrdImportReport {
+  monsterAttacks: MonsterAttackReport;
+}
 
 /** Toute base Drizzle PostgreSQL (postgres.js en production, PGlite dans les tests). */
 export type SrdDatabase = PgDatabase<PgQueryResultHKT, typeof schema>;
@@ -114,7 +120,7 @@ async function importSpells(tx: Transaction, source: SrdSource, classIds: Map<st
   );
 }
 
-async function importStandalone(tx: Transaction, source: SrdSource) {
+async function importStandalone(tx: Transaction, source: SrdSource): Promise<void> {
   await tx
     .insert(srdBackgrounds)
     .values(source.backgrounds.map(mapBackground))
@@ -123,9 +129,10 @@ async function importStandalone(tx: Transaction, source: SrdSource) {
     .insert(srdItems)
     .values([...source.equipment.map(mapEquipment), ...source.magicItems.map(mapMagicItem)])
     .onConflictDoUpdate({ target: srdItems.slug, set: updateOnConflict(srdItems) });
+  const monsters = source.monsters.map(mapMonster);
   await tx
     .insert(srdMonsters)
-    .values(source.monsters.map(mapMonster))
+    .values(monsters)
     .onConflictDoUpdate({ target: srdMonsters.slug, set: updateOnConflict(srdMonsters) });
   await tx
     .insert(srdConditions)
@@ -137,12 +144,12 @@ async function importStandalone(tx: Transaction, source: SrdSource) {
  * Importe le SRD dans une seule transaction : tout ou rien. Rejouable sans doublon (DATA-14) :
  * chaque entrée est insérée ou mise à jour selon son slug, et la version importée est enregistrée.
  * Les entrées absentes de la source ne sont pas supprimées, pour ne pas casser les données qui
- * pourraient y faire référence.
+ * pourraient y faire référence. Renvoie le bilan de la conversion des attaques de monstres.
  */
 export async function importSrd(
   db: SrdDatabase,
   source: SrdSource = loadSrdSource(),
-): Promise<void> {
+): Promise<SrdImportReport> {
   await db.transaction(async (tx) => {
     const classIds = await importClasses(tx, source);
     await importSpecies(tx, source);
@@ -156,6 +163,7 @@ export async function importSrd(
         set: { ...updateOnConflict(srdImports), importedAt: sql`now()` },
       });
   });
+  return { monsterAttacks: reportMonsterAttacks(source.monsters) };
 }
 
 /** Version du SRD présente en base, ou `undefined` si aucun import n'a eu lieu. */
