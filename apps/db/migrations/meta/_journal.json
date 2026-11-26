@@ -29,6 +29,13 @@
       "when": 1795452252490,
       "tag": "0003_srd_monster_actions",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795688227562,
+      "tag": "0004_character_drafts",
+      "breakpoints": true
     }
   ]
 }
