@@ -154,6 +154,9 @@ importers:
       '@nestjs/websockets':
         specifier: ^12.6.0
         version: 12.6.0(@nestjs/common@12.6.0(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.6.0)(@nestjs/platform-socket.io@12.6.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      drizzle-orm:
+        specifier: ^0.45.4
+        version: 0.45.4(@electric-sql/pglite@0.6.0)(postgres@4.1.1)
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -163,7 +166,13 @@ importers:
       socket.io:
         specifier: ^4.8.4
         version: 4.8.4
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
+      '@electric-sql/pglite':
+        specifier: ^0.6.0
+        version: 0.6.0
       '@nestjs/cli':
         specifier: ^12.0.15
         version: 12.0.15(@swc/core@1.16.22(@swc/helpers@0.5.23))(@types/node@22.20.5)(prettier@3.10.1)
