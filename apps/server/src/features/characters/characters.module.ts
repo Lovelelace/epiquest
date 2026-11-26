@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { SrdModule } from "../srd/srd.module.js";
 import { characterDatabaseProvider } from "./character-database.js";
+import { CharacterLevelUpService } from "./character-level-up.service.js";
 import { CharacterLifeService } from "./character-life.service.js";
 import { CharacterRollsService } from "./character-rolls.service.js";
 import { CharacterReferencesService } from "./character-references.service.js";
@@ -21,6 +22,7 @@ import { DraftsService } from "./drafts.service.js";
     CharactersService,
     CharacterRollsService,
     CharacterLifeService,
+    CharacterLevelUpService,
     characterDatabaseProvider,
   ],
 })

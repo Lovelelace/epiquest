@@ -1,8 +1,10 @@
 import {
+  type AbilityBonus,
   abilityModifiers,
   cantripsKnown,
   type CharacterChoices,
   type ClassData,
+  type ClassProgression,
   type CreationRules,
   expertiseCount,
   finalAbilityScores,
@@ -26,6 +28,8 @@ import {
 export interface ResolvedOrigin {
   classData: ClassData;
   species: SpeciesData;
+  progression: ClassProgression;
+  subclassNames: Map<string, string>;
   rules: CreationRules;
   options: CreationOptions;
   equipmentItems: SrdEntry[];
@@ -66,8 +70,13 @@ export class CreationRulesService {
   /**
    * Résout les règles de création d'un brouillon au niveau donné. Le modificateur de la
    * caractéristique d'incantation compte pour les sorts préparés : 0 tant qu'il n'est pas choisi.
+   * `improvements` ajoute les augmentations de caractéristique (montée de niveau).
    */
-  async resolve(choices: DraftChoices, level = 1): Promise<ResolvedOrigin> {
+  async resolve(
+    choices: DraftChoices,
+    level = 1,
+    improvements: readonly AbilityBonus[] = [],
+  ): Promise<ResolvedOrigin> {
     if (!choices.species || !choices.class || !choices.background) {
       throw new UnprocessableEntityException({
         code: "ORIGIN_INCOMPLETE",
@@ -96,9 +105,9 @@ export class CreationRulesService {
     let optionSpellcasting: CreationOptions["spellcasting"] = null;
     if (spellcasting) {
       const modifier = choices.baseAbilityScores
-        ? abilityModifiers(finalAbilityScores(choices.baseAbilityScores, species.bonuses))[
-            spellcasting.ability
-          ]
+        ? abilityModifiers(
+            finalAbilityScores(choices.baseAbilityScores, [...species.bonuses, ...improvements]),
+          )[spellcasting.ability]
         : DEFAULT_ABILITY_MODIFIER;
       const maxSpellLevel = highestSpellLevel(spellSlots(spellcasting.progression, level));
       const classSpells = spells.map((spell) => ({
@@ -145,7 +154,15 @@ export class CreationRulesService {
       spellcasting: optionSpellcasting,
       ...startingEquipment([classEntry, backgroundEntry], equipmentItems),
     };
-    return { classData, species: species.species, rules, options, equipmentItems };
+    return {
+      classData,
+      species: species.species,
+      progression,
+      subclassNames: new Map(subclasses.map((subclass) => [subclass.slug, subclass.name])),
+      rules,
+      options,
+      equipmentItems,
+    };
   }
 }
 

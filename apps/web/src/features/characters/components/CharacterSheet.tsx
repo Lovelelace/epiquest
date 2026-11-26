@@ -10,6 +10,7 @@ import type {
 import { useEffect, useState } from "react";
 import { getCharacter, getRecentRolls, rollFromSheet } from "../api";
 import { describeRoll, signed, VISIBILITY_LABELS } from "../roll-text";
+import { LevelUpPanel } from "./LevelUpPanel";
 import { LifePanel } from "./LifePanel";
 
 const VISIBILITIES: RollVisibility[] = ["public", "private", "hidden"];
@@ -238,6 +239,8 @@ export function CharacterSheet({ characterId }: { characterId: string }) {
       </section>
 
       <LifePanel character={character} onChange={setCharacter} />
+
+      <LevelUpPanel character={character} onChange={setCharacter} />
 
       <section aria-labelledby="rolls-title">
         <h2 id="rolls-title" className="text-2xl font-semibold">
